@@ -13,13 +13,16 @@ O objetivo deste projeto é explorar e entender os conceitos fundamentais do des
 
 Atualmente, o sistema oferece as seguintes funcionalidades:
 
-- **Cadastro de Ordem de Serviço**: Permite ao usuário criar novas ordens de serviço, incluindo detalhes como nome do cliente, descrição do serviço, entre outros.
-- **Consulta e Atualização**: O usuário pode visualizar as ordens de serviço cadastradas e atualizar informações quando necessário.
-- **Exclusão de Ordem de Serviço**: O sistema também permite excluir ordens de serviço que não sejam mais necessárias.
+- **Cadastro de Usuário**: Permite o Administrador a criar novos Usuários, com permissões diferentes (User, Admin).
+- **Consulta e Atualização**: Usuários com permissão de Admin podem verificar e criar usuários para o sistema, mas não podem deletar ou modificar o Admin.
+- **Exclusão de Usuários**: O sistema também permite excluir usuários que não sejam mais necessários.
+- **Verificação de Usuários**: Contém todas as verificações para criar o usuário sem erros ao banco de dados.
 
 ## Status do Projeto
 
-Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcionalidades principais e, em breve, pretendo gerar um **arquivo executável** para facilitar os testes e a execução do sistema sem a necessidade de utilizar uma IDE.
+Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcionalidades de **Clientes**.
+
+Pretendo gerar um **arquivo executável** para facilitar os testes e a execução do sistema sem a necessidade de utilizar uma IDE assim que terminar o projeto.
 
 ## Tecnologias Utilizadas
 
