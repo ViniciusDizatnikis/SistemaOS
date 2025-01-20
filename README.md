@@ -52,7 +52,7 @@
      fone VARCHAR(15),
      login VARCHAR(15) NOT NULL UNIQUE,
      senha VARCHAR(15) NOT NULL,
-     perfil VARCHAR(20) NOT NULL -- 'admin' ou 'user'
+     perfil VARCHAR(20) NOT NULL 
  );
 
  -- Inserir usuários
@@ -83,12 +83,15 @@
      FOREIGN KEY (iduser) REFERENCES usuarios(iduser)
  );
  ```
- ## Telas do Sistema
+## Telas do Sistema
 
- ### Tela de Login
- ![Tela de Login](Imagens/telaLogin.png)  
- A tela de login permite ao usuário acessar o sistema inserindo suas credenciais.
+### Tela de Login
+![Tela de Login](Imagens/telaLogin.png)  
+A tela de login permite ao usuário acessar o sistema inserindo suas credenciais.  
+Use:
+- **Login**: "admin"
+- **Senha**: "admin"
 
- ### Tela Principal
- ![Tela Principal](Imagens/telaPrincipal.png)  
- A tela principal exibe as opções para o gerenciamento de usuários, clientes e ordens de serviço.
+### Tela Principal
+![Tela Principal](Imagens/telaPrincipal.png)  
+A tela principal exibe as opções para o gerenciamento de usuários, clientes e ordens de serviço.
