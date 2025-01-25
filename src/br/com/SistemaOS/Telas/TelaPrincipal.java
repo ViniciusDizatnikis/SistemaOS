@@ -3,9 +3,7 @@ package br.com.SistemaOS.Telas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Image;
 import java.awt.Toolkit;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -22,9 +20,10 @@ import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.mysql.cj.util.Util;
-
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
+import br.com.SistemaOS.Telas.Detalhes.DetalhesOS;
+import br.com.SistemaOS.Telas.Gerenciamento.GerenciarClientes;
+import br.com.SistemaOS.Telas.Gerenciamento.GerenciarUsuarios;
 import br.com.SistemaOS.Utils.UtilitariosTela;
 import br.com.SistemaOS.modelo.Usuario;
 import java.awt.event.KeyEvent;
@@ -247,10 +246,10 @@ public class TelaPrincipal extends JFrame {
         contentPane.add(scrollPane);
         scrollPane.setBounds(10, 92, 927, 555);
 
-        JPopupMenu popupMenu = new JPopupMenu(); // Declarar o popupMenu aqui
-        setUpTablePopupMenu(table, popupMenu); // Passando o popupMenu para o método
+        JPopupMenu popupMenu = new JPopupMenu();
+        setUpTablePopupMenu(table, popupMenu);
 
-        // Adicionando o MouseListener para clique duplo
+
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -264,8 +263,8 @@ public class TelaPrincipal extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Verifica se o clique foi duplo
-                    inspectItem(table); // Executa a função de inspeção
+                if (e.getClickCount() == 2) { 
+                    inspectItem(table); 
                 }
             }
         });
@@ -320,7 +319,7 @@ public class TelaPrincipal extends JFrame {
         JLabel usuarioIcon = new JLabel();
         usuarioIcon.setHorizontalAlignment(SwingConstants.CENTER);
         usuarioIcon.setBounds(1010, 247, 267, 264);
-        usuarioIcon.setIcon(UtilitariosTela.mudarTamanhoImg("/br/com/SistemaOS/Icones/icon/homem-usuario.png", 260, 260));
+        usuarioIcon.setIcon(util.mudarTamanhoImg("/br/com/SistemaOS/Icones/icon/homem-usuario.png", 260, 260));
         contentPane.add(usuarioIcon);
     }
 
@@ -345,7 +344,7 @@ public class TelaPrincipal extends JFrame {
         adjustLabelSizeDynamic(lblUsuario, 387);
         
         Timer timer = new Timer(1000, e -> {
-            lblSaudacao.setText(UtilitariosTela.getSaudacao());
+            lblSaudacao.setText(util.getSaudacao());
         });
         timer.start();
     }
@@ -386,8 +385,8 @@ public class TelaPrincipal extends JFrame {
         desktopPanel_1.add(horaSource);
 
         Timer timerClock = new Timer(1000, e -> {
-        	dataSource.setText(UtilitariosTela.getDataAtual());
-        	horaSource.setText(UtilitariosTela.getHoraAtual());
+        	dataSource.setText(util.getDataAtual());
+        	horaSource.setText(util.getHoraAtual());
         });
         timerClock.start();
     }
@@ -398,7 +397,6 @@ public class TelaPrincipal extends JFrame {
         FontMetrics metrics = label.getFontMetrics(label.getFont());
         int lineHeight = metrics.getHeight();
 
-        // Divida o texto em linhas com base na largura máxima
         String[] words = text.split(" ");
         StringBuilder line = new StringBuilder();
         int lineCount = 0;
@@ -416,7 +414,6 @@ public class TelaPrincipal extends JFrame {
             lineCount++;
         }
 
-        // Ajusta o tamanho do JLabel
         label.setBounds(label.getX(), label.getY(), width, lineHeight * lineCount);
     }
 }

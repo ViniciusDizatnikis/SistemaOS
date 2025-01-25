@@ -20,7 +20,52 @@ public class CentroClientesDAO {
         }
     }
 
-    // Método para buscar todos os clientes
+
+    public void updateCliente(Object nome, Object endereco, Object fone, Object email, Integer id) {
+        StringBuilder query = new StringBuilder("UPDATE clientes SET ");
+        ArrayList<Object> params = new ArrayList<>();
+
+        // Adiciona as colunas a serem atualizadas
+        if (nome != null) {
+            query.append("nome = ?, ");
+            params.add(nome);
+        }
+        if (endereco != null) {
+            query.append("endereco = ?, ");
+            params.add(endereco);
+        }
+        if (fone != null) {
+            query.append("fone = ?, ");
+            params.add(fone);
+        }
+        if (email != null) {
+            query.append("email = ? ");
+            params.add(email);
+        }
+
+        // Remove a última vírgula, se existir
+        if (query.toString().endsWith(", ")) {
+            query.delete(query.length() - 2, query.length());
+        }
+
+        // Adiciona a condição WHERE para identificar o cliente
+        query.append("WHERE idCliente = ?");
+        params.add(id);
+
+        try (PreparedStatement stmt = con.prepareStatement(query.toString())) {
+            // Configura os parâmetros
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i).toString());
+            }
+            
+            // Executa a atualização
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
     public List<Cliente> getClientes() {
         String sql = "SELECT * FROM clientes";
         List<Cliente> listaClientes = new ArrayList<>();
@@ -47,21 +92,18 @@ public class CentroClientesDAO {
     
     
     public void criarCliente(String nome, String endereco, String telefone, String email) {
-        // Substitui valores nulos por "Não informado"
         endereco = (endereco == null || endereco.trim().isEmpty()) ? "Não informado" : endereco;
         email = (email == null || email.trim().isEmpty()) ? "Não informado" : email;
-
-        // SQL com todas as colunas
+        
         String sql = "INSERT INTO clientes (nome, endereco, fone, email) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            // Configura os parâmetros
             stmt.setString(1, nome);
             stmt.setString(2, endereco);
             stmt.setString(3, telefone);
             stmt.setString(4, email);
 
-            // Executa o comando
+
             stmt.executeUpdate();
             System.out.println("Cliente criado com sucesso!");
 

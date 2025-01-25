@@ -10,24 +10,26 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class UtilitariosTela {
-	private static final Color BACKGROUND_COLOR = new Color(45, 45, 48);
-	
-	
-	
-    public static Color getBackgroundColor() {
-		return BACKGROUND_COLOR;
-	}
+    private static final Color BACKGROUND_COLOR = new Color(45, 45, 48);
+    private static final Color DEFAULT_TEXT_COLOR = Color.WHITE;
+    private static final Font DEFAULT_FONT = new Font("Segoe UI", Font.BOLD, 14);
 
-	public static String getDataAtual() {
+    public Color getBackgroundColor() {
+        return BACKGROUND_COLOR;
+    }
+
+
+    public String getDataAtual() {
         return new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
-    public static String getHoraAtual() {
+
+    public String getHoraAtual() {
         return new SimpleDateFormat("HH:mm").format(new Date());
     }
 
-    // Método para obter a saudação com base na hora
-    public static String getSaudacao() {
+   
+    public String getSaudacao() {
         int horaAtual = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
         if (horaAtual >= 6 && horaAtual < 12) {
             return "Bom Dia!";
@@ -38,25 +40,25 @@ public class UtilitariosTela {
         }
     }
 
-    public static ImageIcon mudarTamanhoImg(String img, int x, int y) {
-        ImageIcon resizedImage = null;
+  
+    public ImageIcon mudarTamanhoImg(String img, int largura, int altura) {
         try {
             ImageIcon imageIcon = new ImageIcon(UtilitariosTela.class.getResource(img));
             Image image = imageIcon.getImage();
-            // Redimensiona a imagem
-            Image resizedImageTemp = image.getScaledInstance(x, y, Image.SCALE_SMOOTH);
-            resizedImage = new ImageIcon(resizedImageTemp);
+            Image resizedImage = image.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
+            return new ImageIcon(resizedImage);
         } catch (Exception e) {
+            System.err.println("Erro ao redimensionar a imagem: " + img);
             e.printStackTrace();
+            return null;
         }
-        return resizedImage;
     }
-    
-    public static JLabel criarLabel(String texto, int x, int y, int largura, int altura, int tamanhoFonte) {
-	    JLabel label = new JLabel(texto);
-	    label.setForeground(Color.WHITE);
-	    label.setFont(new Font("Segoe UI", Font.BOLD, tamanhoFonte));
-	    label.setBounds(x, y, largura, altura);
-	    return label;
-	}
+
+    public JLabel criarLabel(String texto, int x, int y, int largura, int altura, int tamanhoFonte) {
+        JLabel label = new JLabel(texto);
+        label.setForeground(DEFAULT_TEXT_COLOR);
+        label.setFont(new Font(DEFAULT_FONT.getName(), DEFAULT_FONT.getStyle(), tamanhoFonte));
+        label.setBounds(x, y, largura, altura);
+        return label;
+    }
 }

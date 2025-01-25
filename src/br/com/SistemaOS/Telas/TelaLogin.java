@@ -30,6 +30,7 @@ public class TelaLogin extends JFrame {
 
     // Dependências
     private final CentroUsuariosDAO telaDAO = new CentroUsuariosDAO();
+    private final UtilitariosTela util = new UtilitariosTela();
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -69,7 +70,7 @@ public class TelaLogin extends JFrame {
     private JPanel criarPainelPrincipal() {
         JPanel painel = new JPanel();
         painel.setLayout(null);
-        painel.setBackground(UtilitariosTela.getBackgroundColor());
+        painel.setBackground(util.getBackgroundColor());
         
         JLabel lblByVinicius = new JLabel("by vinicius", SwingConstants.CENTER);
         lblByVinicius.setFont(new Font("Segoe UI", Font.ITALIC, 12));
@@ -80,7 +81,7 @@ public class TelaLogin extends JFrame {
     }
 
     private void adicionarLogo() {
-        JLabel logoImagem = new JLabel(UtilitariosTela.mudarTamanhoImg("/br/com/SistemaOS/Icones/icon/Logo.png", 90, 90));
+        JLabel logoImagem = new JLabel(util.mudarTamanhoImg("/br/com/SistemaOS/Icones/icon/Logo.png", 90, 90));
         logoImagem.setBounds(centralizarComponente(80), 0, 80, 80);
         contentPane.add(logoImagem);
     }
