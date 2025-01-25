@@ -25,7 +25,6 @@ public class CentroClientesDAO {
         StringBuilder query = new StringBuilder("UPDATE clientes SET ");
         ArrayList<Object> params = new ArrayList<>();
 
-        // Adiciona as colunas a serem atualizadas
         if (nome != null) {
             query.append("nome = ?, ");
             params.add(nome);
@@ -43,22 +42,18 @@ public class CentroClientesDAO {
             params.add(email);
         }
 
-        // Remove a última vírgula, se existir
         if (query.toString().endsWith(", ")) {
             query.delete(query.length() - 2, query.length());
         }
 
-        // Adiciona a condição WHERE para identificar o cliente
         query.append("WHERE idCliente = ?");
         params.add(id);
 
         try (PreparedStatement stmt = con.prepareStatement(query.toString())) {
-            // Configura os parâmetros
             for (int i = 0; i < params.size(); i++) {
                 stmt.setObject(i + 1, params.get(i).toString());
             }
             
-            // Executa a atualização
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
