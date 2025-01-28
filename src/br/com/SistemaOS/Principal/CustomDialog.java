@@ -1,4 +1,4 @@
-package br.com.SistemaOS.Telas;
+package br.com.SistemaOS.Principal;
 
 import javax.swing.*;
 import java.awt.*;

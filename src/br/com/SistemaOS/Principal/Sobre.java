@@ -1,4 +1,4 @@
-package br.com.SistemaOS.Telas;
+package br.com.SistemaOS.Principal;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
