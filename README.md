@@ -30,13 +30,13 @@
 
  ## Como Executar
 
- 1. Clone o repositório para o seu computador:
+## 1. Clone o repositório para o seu computador:
     ```bash
       git clone [https://github.com/ViniciusDizatnikis/SistemaOS.git](https://github.com/ViniciusDizatnikis/SistemaOS.git)
     ```
- 2. Configure seu banco de dados com a estrutura abaixo para que funcione corretamente.
+## 2. Configure seu banco de dados com a estrutura abaixo para que funcione corretamente.
 
- ### Código SQL para Banco de Dados
+# Código SQL para Banco de Dados
 
  Você pode copiar o código SQL abaixo para configurar o banco de dados:
 
@@ -83,23 +83,22 @@
      FOREIGN KEY (iduser) REFERENCES usuarios(iduser)
  );
  ```
-3. configure para seu banco de dados no "ModuloDeConexao.java"
-### Config SQL
+## 3. configure para seu banco de dados no "ModuloDeConexao.java"
+# Config SQL
 ![Tela de Login](Imagens/configSQL.png)  
 
-5. vá ate o jFrame "TelaLogin.java" e execute o codigo.
-### Local
+## 4. vá ate o jFrame "TelaLogin.java" e execute o codigo.
+# Local
 ![Tela de Login](Imagens/Local.png)  
 
-4. logo apos ele irá abrir esta tela.
-5. 
-### Tela de Login
+## 5. logo apos ele irá abrir esta tela. 
+# Tela de Login
 ![Tela de Login](Imagens/telaLogin.png)  
 Se seu banco de dados estiver correto basta colocar essas informções:
 - **Login**: "admin"
 - **Senha**: "admin"
 
-### Tela Principal
+# Tela Principal
 ![Tela Principal](Imagens/telaPrincipal.png)  
 Ele abrira a tela principal do sistema.
 
