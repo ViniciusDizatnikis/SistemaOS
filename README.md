@@ -84,12 +84,12 @@
  );
  ```
 3. configure para seu banco de dados no "ModuloDeConexao.java"
-### Local
+### Config SQL
 ![Tela de Login](Imagens/configSQL.png)  
 
 5. vá ate o jFrame "TelaLogin.java" e execute o codigo.
 ### Local
-![Tela de Login](Imagens/local.png)  
+![Tela de Login](Imagens/Local.png)  
 
 4. logo apos ele irá abrir esta tela.
 5. 
