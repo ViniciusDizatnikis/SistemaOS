@@ -75,7 +75,7 @@ public class GerenciarClientes extends JFrame {
     }
 
     private void inicializarLabels() {
-        painelPrincipal.add(utilitariosTela.criarLabel("Clientes", 429, 11, 139, 47, 30));
+        painelPrincipal.add(utilitariosTela.criarLabel("Clientes", 429, 11, 139, 47, 30, true));
     }
 
     private void inicializarTabela() {

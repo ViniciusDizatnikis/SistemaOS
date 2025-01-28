@@ -1,12 +1,10 @@
 package br.com.SistemaOS.Telas.Detalhes;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -24,11 +22,10 @@ import br.com.SistemaOS.Utils.UtilitariosTela;
 import br.com.SistemaOS.modelo.Usuario;
 
 import javax.swing.JPasswordField;
-import javax.swing.JPopupMenu;
 
 public class DetalhesUsuario extends JFrame {
 
-
+	private static final long serialVersionUID = 1L;
 	//Outras classes
 	private CentroUsuariosDAO dao = new CentroUsuariosDAO();
 	private UtilitariosTela util = new UtilitariosTela();
@@ -85,20 +82,14 @@ public class DetalhesUsuario extends JFrame {
     
     	initBtns();
     	
-        //Deletar Usuario
         btnDeletar.addActionListener(e -> deletarUsuario());
-        
-        
-        //Ok/Sair Da Janela
+
         btnOk.addActionListener(e -> this.dispose());
         
-        //Salvar alteções
         btnSalvar.addActionListener(e -> salvarUsuario());
 
-        //Editar Usuario
         btnEditar.addActionListener(e-> modoEdicao(true));
         
-        //Cancelar Edição
         btnCancelar.addActionListener(e-> modoEdicao(false));
         
         //configuração da janela
@@ -152,16 +143,16 @@ public class DetalhesUsuario extends JFrame {
 	}
 
 	private void initLabels() {
-    	contentPane.add(util.criarLabel("Informações do Usuário", (this.getWidth() - 521), 0, 521, 52, 35));
-    	contentPane.add(util.criarLabel("Nome:", 48, 284, 100, 30, 20));
-    	contentPane.add(util.criarLabel("Fone:", 48, 334, 100, 30, 20));
-    	contentPane.add(util.criarLabel("Login:", 498, 284, 100, 30, 20));
-    	contentPane.add(util.criarLabel("Perfil:", 48, 390, 100, 30, 20));
-    	contentPane.add(util.criarLabel("Senha:", 498, 334, 100, 30, 20));
-    	contentPane.add(util.criarLabel("ID:", 244, 177, 50, 46, 25));
-    	contentPane.add(util.criarLabel("Usuario:", 244, 76, 521, 52, 35));
-    	contentPane.add(util.criarLabel(idUser.toString(), 284, 180, 429, 40, 25));
-    	nomeUsuarioCard = util.criarLabel(nomeUser, 244, 128, 600, 52, 35);
+		contentPane.add(util.criarLabel("Informações do Usuário", (this.getWidth() - 400)/2, 0, 400, 52, 35, true));
+    	contentPane.add(util.criarLabel("Nome:", 48, 284, 100, 30, 20, false));
+    	contentPane.add(util.criarLabel("Fone:", 48, 334, 100, 30, 20, false));
+    	contentPane.add(util.criarLabel("Login:", 498, 284, 100, 30, 20, false));
+    	contentPane.add(util.criarLabel("Perfil:", 48, 390, 100, 30, 20, false));
+    	contentPane.add(util.criarLabel("Senha:", 498, 334, 100, 30, 20, false));
+    	contentPane.add(util.criarLabel("ID:", 244, 177, 50, 46, 25, false));
+    	contentPane.add(util.criarLabel("Usuario:", 244, 76, 521, 52, 35, false));
+    	contentPane.add(util.criarLabel(idUser.toString(), 284, 180, 429, 40, 25, false));
+    	nomeUsuarioCard = util.criarLabel(nomeUser, 244, 128, 600, 52, 35, false);
     	contentPane.add(nomeUsuarioCard);
     	
     	 JLabel fotoUser = new JLabel("");

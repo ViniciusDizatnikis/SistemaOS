@@ -71,7 +71,7 @@ public class GerenciarUsuarios extends JFrame {
     }
 
     private void initLabels() {
-        contentPane.add(util.criarLabel("Usuários", 429, 11, 139, 47, 30));
+        contentPane.add(util.criarLabel("Usuários", (this.getWidth()-150)/2, 11, 150, 47, 30, true));
     }
 
     private void initTable() {

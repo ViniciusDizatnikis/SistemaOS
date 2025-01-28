@@ -29,7 +29,7 @@ public class TelaLogin extends JFrame {
     private JButton btnLogin;
 
     // Dependências
-    private final CentroUsuariosDAO telaDAO = new CentroUsuariosDAO();
+    private final CentroUsuariosDAO dao = new CentroUsuariosDAO();
     private final UtilitariosTela util = new UtilitariosTela();
 
     public static void main(String[] args) {
@@ -55,93 +55,95 @@ public class TelaLogin extends JFrame {
     }
 
     private void inicializarComponentes() {
-        contentPane = criarPainelPrincipal();
-        adicionarLogo();
-        adicionarTitulos();
-        txtNome = adicionarCampoTexto("Usuário:", 161, 191);
-        txtPassword = adicionarCampoSenha("Senha:", 251, 281);
-        btnLogin = adicionarBotaoLogin();
-        lblStatus = adicionarLabelStatus();
-        atualizarStatus();
-        setContentPane(contentPane);
-        getRootPane().setDefaultButton(btnLogin);
-    }
+        contentPane = new JPanel();
+        contentPane.setLayout(null);
+        contentPane.setBackground(util.getBackgroundColor());
 
-    private JPanel criarPainelPrincipal() {
-        JPanel painel = new JPanel();
-        painel.setLayout(null);
-        painel.setBackground(util.getBackgroundColor());
-        
-        JLabel lblByVinicius = new JLabel("by vinicius", SwingConstants.CENTER);
-        lblByVinicius.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-        lblByVinicius.setForeground(Color.LIGHT_GRAY);
-        lblByVinicius.setBounds(centralizarComponente(100), getHeight() - 80, 100, 20); // Centralizando horizontalmente
-        painel.add(lblByVinicius);
-        return painel;
-    }
-
-    private void adicionarLogo() {
         JLabel logoImagem = new JLabel(util.mudarTamanhoImg("/br/com/SistemaOS/Icones/icon/Logo.png", 90, 90));
         logoImagem.setBounds(centralizarComponente(80), 0, 80, 80);
         contentPane.add(logoImagem);
+        
+        JLabel lblTitulo = createLabel("QuickFix Pro", 71, 22);
+        JLabel lblSubtitulo = createLabel("Sistema de Ordem e Serviço", 96, 15);
+        contentPane.add(lblTitulo);
+        contentPane.add(lblSubtitulo);
+
+        txtNome = criarCampoTexto("Usuário:", 161, 191);
+        txtPassword = criarCampoSenha("Senha:", 251, 281);
+        btnLogin = criarBotaoLogin();
+        lblStatus = criarLabelStatus();
+
+        contentPane.add(txtNome);
+        contentPane.add(txtPassword);
+        contentPane.add(btnLogin);
+        contentPane.add(lblStatus);
+
+        JLabel lblByVinicius = new JLabel("by vinicius", SwingConstants.CENTER);
+        lblByVinicius.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        lblByVinicius.setForeground(Color.LIGHT_GRAY);
+        lblByVinicius.setBounds(centralizarComponente(100), getHeight() - 80, 100, 20); 
+
+        setContentPane(contentPane);
+        getRootPane().setDefaultButton(btnLogin);
+        atualizarStatus();
     }
 
-    private void adicionarTitulos() {
-        adicionarTitulo("QuickFix Pro", 71, 22);
-        adicionarTitulo("Sistema de Ordem e Serviço", 96, 15);
-    }
-
-    private void adicionarTitulo(String texto, int posY, int fontSize) {
+    private JLabel createLabel(String texto, int posY, int fontSize) {
         JLabel label = new JLabel(texto, SwingConstants.CENTER);
         label.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, fontSize));
         label.setForeground(Color.WHITE);
         label.setBounds(centralizarComponente(CAMPO_LARGURA), posY, CAMPO_LARGURA, 40);
-        contentPane.add(label);
+        return label;
     }
 
-    private JTextField adicionarCampoTexto(String label, int labelPosY, int campoPosY) {
-        return (JTextField) adicionarCampo(label, labelPosY, campoPosY, new JTextField());
+    private JTextField criarCampoTexto(String label, int labelPosY, int campoPosY) {
+        JLabel lblUsuario = new JLabel(label, SwingConstants.LEFT);
+        lblUsuario.setFont(DEFAULT_FONT);
+        lblUsuario.setForeground(Color.WHITE);
+        lblUsuario.setBounds(centralizarComponente(CAMPO_LARGURA), labelPosY, CAMPO_LARGURA, 30);
+        contentPane.add(lblUsuario);
+
+        JTextField txtCampo = new JTextField();
+        txtCampo.setFont(DEFAULT_FONT);
+        txtCampo.setBounds(centralizarComponente(CAMPO_LARGURA), campoPosY, CAMPO_LARGURA, CAMPO_ALTURA);
+        txtCampo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        txtCampo.setBackground(INPUT_COLOR);
+        txtCampo.setForeground(Color.WHITE);
+        return txtCampo;
     }
 
-    private JPasswordField adicionarCampoSenha(String label, int labelPosY, int campoPosY) {
-        return (JPasswordField) adicionarCampo(label, labelPosY, campoPosY, new JPasswordField());
+    private JPasswordField criarCampoSenha(String label, int labelPosY, int campoPosY) {
+        JLabel lblSenha = new JLabel(label, SwingConstants.LEFT);
+        lblSenha.setFont(DEFAULT_FONT);
+        lblSenha.setForeground(Color.WHITE);
+        lblSenha.setBounds(centralizarComponente(CAMPO_LARGURA), labelPosY, CAMPO_LARGURA, 30);
+        contentPane.add(lblSenha);
+
+        JPasswordField txtCampo = new JPasswordField();
+        txtCampo.setFont(DEFAULT_FONT);
+        txtCampo.setBounds(centralizarComponente(CAMPO_LARGURA), campoPosY, CAMPO_LARGURA, CAMPO_ALTURA);
+        txtCampo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        txtCampo.setBackground(INPUT_COLOR);
+        txtCampo.setForeground(Color.WHITE);
+        return txtCampo;
     }
 
-    private JComponent adicionarCampo(String labelTexto, int labelPosY, int campoPosY, JComponent campo) {
-        JLabel label = new JLabel(labelTexto, SwingConstants.LEFT);
-        label.setFont(DEFAULT_FONT);
-        label.setForeground(Color.WHITE);
-        label.setBounds(centralizarComponente(CAMPO_LARGURA), labelPosY, CAMPO_LARGURA, 30);
-        contentPane.add(label);
-
-        campo.setFont(DEFAULT_FONT);
-        campo.setBounds(centralizarComponente(CAMPO_LARGURA), campoPosY, CAMPO_LARGURA, CAMPO_ALTURA);
-        campo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        campo.setBackground(INPUT_COLOR);
-        campo.setForeground(Color.WHITE);
-        contentPane.add(campo);
-
-        return campo;
+    private JButton criarBotaoLogin() {
+        JButton btn = new JButton("Entrar");
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btn.setBackground(new Color(63, 182, 207));
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btn.setBounds(centralizarComponente(CAMPO_LARGURA), 345, CAMPO_LARGURA, CAMPO_ALTURA);
+        return btn;
     }
 
-    private JButton adicionarBotaoLogin() {
-        JButton botao = new JButton("Entrar");
-        botao.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        botao.setBackground(new Color(63, 182, 207));
-        botao.setForeground(Color.WHITE);
-        botao.setFocusPainted(false);
-        botao.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        botao.setBounds(centralizarComponente(CAMPO_LARGURA), 345, CAMPO_LARGURA, CAMPO_ALTURA);
-        contentPane.add(botao);
-        return botao;
-    }
-
-    private JLabel adicionarLabelStatus() {
+    private JLabel criarLabelStatus() {
         JLabel status = new JLabel("", SwingConstants.CENTER);
         status.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         status.setForeground(Color.WHITE);
         status.setBounds(centralizarComponente(CAMPO_LARGURA), 420, CAMPO_LARGURA, 30);
-        contentPane.add(status);
         return status;
     }
 
@@ -172,12 +174,12 @@ public class TelaLogin extends JFrame {
     }
 
     private void configurarTimerStatus() {
-        statusTimer = new Timer(5000, e -> atualizarStatus());
+        statusTimer = new Timer(4000, e -> atualizarStatus());
         statusTimer.start();
     }
 
     private void atualizarStatus() {
-        boolean conectado = telaDAO.getStatus();
+        boolean conectado = dao.getStatus();
         String mensagem = conectado ? "Status: Conectado ao banco de dados" : "Status: Erro ao conectar ao banco de dados";
         Color cor = conectado ? SUCCESS_COLOR : ERROR_COLOR;
 
@@ -195,7 +197,7 @@ public class TelaLogin extends JFrame {
         }
 
         try {
-            Usuario usuario = telaDAO.login(username, password);
+            Usuario usuario = dao.login(username, password);
             if (usuario != null) {
                 abrirTelaPrincipal(usuario);
             } else {
@@ -220,3 +222,9 @@ public class TelaLogin extends JFrame {
         JOptionPane.showMessageDialog(this, mensagem, "Aviso", messageType);
     }
 }
+
+
+
+
+
+
