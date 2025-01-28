@@ -29,6 +29,7 @@ import br.com.SistemaOS.modelo.Usuario;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Console;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 
@@ -39,11 +40,13 @@ public class TelaPrincipal extends JFrame {
     private CentroUsuariosDAO dao =  new CentroUsuariosDAO();
     private Usuario user;
 	private JPanel contentPane;
+	private boolean isAdmin;
     
     
     public TelaPrincipal(Usuario usuInfo) {
     	this.user = usuInfo;
-        boolean isAdmin = usuInfo.getPerfil().equals("admin");
+        this.isAdmin = usuInfo.getPerfil().equals("admin");
+
         
         setUpFrame();
         setUpMenuBar(isAdmin);
@@ -68,6 +71,7 @@ public class TelaPrincipal extends JFrame {
         JMenuItem menuClientes = new JMenuItem("Clientes");
         menuClientes.setAccelerator(KeyStroke.getKeyStroke("control C"));
         menuClientes.addActionListener(e -> abrirCadastroCliente());
+        menuClientes.setEnabled(isaAdmin);
         menuCadastro.add(menuClientes);
 
         JMenuItem menuOS = new JMenuItem("OS");
@@ -78,12 +82,12 @@ public class TelaPrincipal extends JFrame {
         JMenuItem menuUsuarios = new JMenuItem("Usuários");
         menuUsuarios.setAccelerator(KeyStroke.getKeyStroke("control U"));
         menuUsuarios.addActionListener(e -> abrirCadastroUsuarios());
+        menuUsuarios.setEnabled(isaAdmin);
         menuCadastro.add(menuUsuarios);
-
-        
         
         // Menu Relatórios
         JMenu menuRelatorios = new JMenu("Relatórios");
+        menuRelatorios.setEnabled(isaAdmin);
         menuBar.add(menuRelatorios);
 
         JMenuItem servicosItem = new JMenuItem("Serviços");
@@ -163,41 +167,7 @@ public class TelaPrincipal extends JFrame {
         JOptionPane.showMessageDialog(this, "Sistema de Ordem e Serviço - Versão 1.0", "Sobre", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void realizarLogoff() {
-        int confirm = JOptionPane.showConfirmDialog(this, "Deseja realizar logoff?", "Confirmação", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            new TelaLogin().setVisible(true);
-            dispose();
-        }
-    }
-
-    private void addMenuItem(JMenu menu, String title, String shortcut) {
-        JMenuItem item = new JMenuItem(title);
-        item.setAccelerator(KeyStroke.getKeyStroke(shortcut));
-        menu.add(item);
-    }
-
-    private void addMenuItem(JMenu menu, String title, int keyEvent, int modifiers) {
-        JMenuItem item = new JMenuItem(title);
-        item.setAccelerator(KeyStroke.getKeyStroke(keyEvent, modifiers));
-        menu.add(item);
-    }
-
-    private void addUsuariosMenuItem(JMenu menuCadastro, boolean isAdmin) {
-        JMenuItem usuariosItem = new JMenuItem("Usuários");
-        usuariosItem.setAccelerator(KeyStroke.getKeyStroke("control U"));
-        usuariosItem.setEnabled(isAdmin);
-        usuariosItem.addActionListener(e -> new GerenciarUsuarios(user).setVisible(true));
-        menuCadastro.add(usuariosItem);
-    }
-
-    private void addLogoffMenuItem(JMenu menuOpcoes) {
-        JMenuItem logOff = new JMenuItem("Logoff");
-        logOff.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, InputEvent.ALT_DOWN_MASK));
-        logOff.addActionListener(e -> logOffAction());
-        menuOpcoes.add(logOff);
-    }
-
+   
     private void logOffAction() {
         int confirm = JOptionPane.showConfirmDialog(this, "Deseja Fazer LogOff?", "Confirmação", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
