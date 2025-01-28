@@ -36,8 +36,6 @@
     ```
 ## 2. Configure seu banco de dados com a estrutura abaixo para que funcione corretamente.
 
-# Código SQL para Banco de Dados
-
  Você pode copiar o código SQL abaixo para configurar o banco de dados:
 
  ```sql
