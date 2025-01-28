@@ -41,6 +41,9 @@ public class GerenciarClientes extends JFrame {
 
     // Usuário
     private Usuario usuarioLogado;
+    
+    private UtilitariosTela util = new UtilitariosTela();
+    
 
     // Lista de clientes para otimização
     private List<Cliente> listaTodosClientes;
@@ -113,18 +116,15 @@ public class GerenciarClientes extends JFrame {
     }
 
     private void inicializarFerramentas() {
-        // Campo de pesquisa
+    	
         campoPesquisa = new JTextField("Digite o nome do cliente...");
-        campoPesquisa.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
+        util.estilizarField(campoPesquisa, "");
         campoPesquisa.setBounds(731, 84, 263, 32);
         painelPrincipal.add(campoPesquisa);
 
-        // Botão de criação de cliente
         botaoCriarCliente = new JButton("Adicionar Cliente");
-        botaoCriarCliente.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        util.estilizarBotao(botaoCriarCliente);
         botaoCriarCliente.setBounds(10, 93, 194, 23);
-        botaoCriarCliente.setBackground(new Color(63, 182, 207));
-        botaoCriarCliente.setForeground(Color.WHITE);
         botaoCriarCliente.setFocusPainted(false);
         painelPrincipal.add(botaoCriarCliente);
     }

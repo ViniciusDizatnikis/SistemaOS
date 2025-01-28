@@ -85,6 +85,20 @@ public class CentroClientesDAO {
         return listaClientes;
     }
     
+    public void deletarCliente(int id) {
+        String sql = "DELETE FROM clientes WHERE idcliente = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erro ao deletar cliente: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    
     
     public void criarCliente(String nome, String endereco, String telefone, String email) {
         endereco = (endereco == null || endereco.trim().isEmpty()) ? "Não informado" : endereco;

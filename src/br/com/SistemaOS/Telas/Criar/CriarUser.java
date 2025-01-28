@@ -141,8 +141,6 @@ public class CriarUser extends JFrame {
             String senha = fieldSenha.getText().trim();
             String perfil = cbPerfil.getSelectedItem().toString().toLowerCase();
             
-            System.out.println(perfil);
-            
             if (isCampoVazio(nome, fone, login, senha)) {
             	JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.");
             	return;
@@ -166,7 +164,6 @@ public class CriarUser extends JFrame {
             return perfil; 
         }
 
-        // Verifica se a primeira letra é maiúscula
         char primeiraLetra = perfil.charAt(0);
         if (!Character.isUpperCase(primeiraLetra)) {
             perfil = Character.toUpperCase(primeiraLetra) + perfil.substring(1);
@@ -174,18 +171,17 @@ public class CriarUser extends JFrame {
         return perfil;
     }
 
-    // Método para criar o usuário
     public void criarUsuario(String nome, String fone, String login, String senha, String perfil) {
         dao.criarUsuario(nome, fone, login, senha, perfil);
     }
 
-    // Função para verificar se algum campo é nulo ou vazio
+
     private boolean isCampoVazio(String... campos) {
         for (String campo : campos) {
             if (campo == null || campo.trim().isEmpty()) {
-                return true; // Retorna true se encontrar um campo vazio ou nulo
+                return true;
             }
         }
-        return false; // Retorna false se todos os campos forem preenchidos
+        return false;
     }
 }

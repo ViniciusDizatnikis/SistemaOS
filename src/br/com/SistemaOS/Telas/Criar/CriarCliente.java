@@ -1,8 +1,10 @@
 package br.com.SistemaOS.Telas.Criar;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 import br.com.SistemaOS.DAO.CentroClientesDAO;
 import br.com.SistemaOS.Utils.UtilitariosTela;
@@ -20,24 +21,15 @@ public class CriarCliente extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private UtilitariosTela util;
+    
+    private UtilitariosTela util = new UtilitariosTela();
+    private CentroClientesDAO dao = new CentroClientesDAO();
+    
     private JTextField fieldNome;
     private JTextField fieldEndereco;
     private JTextField fieldTelefone;
     private JTextField fieldEmail;
-    private CentroClientesDAO dao = new CentroClientesDAO();
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                CriarCliente frame = new CriarCliente();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
+    
     public CriarCliente() {
         configurarFrame();
         adicionarTitulo();
@@ -50,13 +42,24 @@ public class CriarCliente extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 1020, 540);
         setLocationRelativeTo(null);
-        util = new UtilitariosTela();
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setBackground(util.getBackgroundColor());
         contentPane.setLayout(null);
         setContentPane(contentPane);
+        
+        
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    dispose(); 
+                }
+            }
+        });
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
     }
 
     private void adicionarTitulo() {
@@ -76,9 +79,8 @@ public class CriarCliente extends JFrame {
         contentPane.add(lblNome);
 
         fieldNome = new JTextField();
+        util.estilizarField(fieldNome, "");
         fieldNome.setBounds(54, 221, 440, 35);
-        fieldNome.setBorder(new LineBorder(Color.GRAY, 1, true));
-        fieldNome.setColumns(10);
         contentPane.add(fieldNome);
 
         JLabel lblEndereco = new JLabel("Endereço:");
@@ -88,9 +90,8 @@ public class CriarCliente extends JFrame {
         contentPane.add(lblEndereco);
 
         fieldEndereco = new JTextField();
+        util.estilizarField(fieldEndereco, "");
         fieldEndereco.setBounds(54, 321, 440, 35);
-        fieldEndereco.setBorder(new LineBorder(Color.GRAY, 1, true));
-        fieldEndereco.setColumns(10);
         contentPane.add(fieldEndereco);
 
         JLabel lblTelefone = new JLabel("Telefone:");
@@ -100,9 +101,8 @@ public class CriarCliente extends JFrame {
         contentPane.add(lblTelefone);
 
         fieldTelefone = new JTextField();
+        util.estilizarField(fieldTelefone,"");
         fieldTelefone.setBounds(504, 221, 440, 35);
-        fieldTelefone.setBorder(new LineBorder(Color.GRAY, 1, true));
-        fieldTelefone.setColumns(10);
         contentPane.add(fieldTelefone);
 
         JLabel lblEmail = new JLabel("Email:");
@@ -112,24 +112,18 @@ public class CriarCliente extends JFrame {
         contentPane.add(lblEmail);
 
         fieldEmail = new JTextField();
+        util.estilizarField(fieldEmail,"");
         fieldEmail.setBounds(504, 321, 440, 35);
-        fieldEmail.setBorder(new LineBorder(Color.GRAY, 1, true));
-        fieldEmail.setColumns(10);
         contentPane.add(fieldEmail);
     }
 
     private void adicionarBotaoCriar() {
         JButton btnCriar = new JButton("Criar");
+        util.estilizarBotao(btnCriar);
         btnCriar.setBounds(460, 420, 100, 40);
-        btnCriar.setBackground(new Color(100, 149, 237));
-        btnCriar.setForeground(Color.WHITE);
-        btnCriar.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btnCriar.setBorder(new LineBorder(new Color(30, 144, 255), 2, true));
         contentPane.add(btnCriar);
         btnCriar.addActionListener(e -> validarEProcessarCadastro());
     }
-
-    
 
     private void validarEProcessarCadastro() {
         String nome = fieldNome.getText().trim();
