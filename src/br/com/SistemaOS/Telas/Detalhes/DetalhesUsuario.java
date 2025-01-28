@@ -152,7 +152,7 @@ public class DetalhesUsuario extends JFrame {
     	contentPane.add(util.criarLabel("ID:", 244, 177, 50, 46, 25, false));
     	contentPane.add(util.criarLabel("Usuario:", 244, 76, 521, 52, 35, false));
     	contentPane.add(util.criarLabel(idUser.toString(), 284, 180, 429, 40, 25, false));
-    	nomeUsuarioCard = util.criarLabel(nomeUser, 244, 128, 600, 52, 35, false);
+    	nomeUsuarioCard = util.criarLabel(nomeUser, 244, 128, 600, 52, 35, false	);
     	contentPane.add(nomeUsuarioCard);
     	
     	 JLabel fotoUser = new JLabel("");
