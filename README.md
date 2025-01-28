@@ -13,14 +13,14 @@
 
  Atualmente, o sistema oferece as seguintes funcionalidades:
 
- - **Cadastro de Usuário**: Permite ao Administrador criar novos Usuários com diferentes permissões (User, Admin).
+ - **CRUD de Usuário**: Permite ao Administrador criar novos Usuários com diferentes permissões (User, Admin).
  - **Consulta e Atualização**: Usuários com permissão de Admin podem verificar e criar novos usuários, mas não podem excluir ou modificar o Admin.
- - **Exclusão de Usuários**: Permite excluir usuários que não são mais necessários.
  - **Verificação de Usuários**: Contém validações para criar usuários sem erros no banco de dados.
+ - **CRUD de Clientes**: Permite a conta com admin criar novos Clientes e podendo alterar e apagar quando quiser.
 
  ## Status do Projeto
 
- Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcionalidades de **Clientes** e pretendo gerar um **arquivo executável** para facilitar os testes e a execução do sistema sem a necessidade de IDE.
+ Atualmente, o sistema está em fase de desenvolvimento. Pretendo gerar um **arquivo executável** para facilitar os testes e a execução do sistema sem a necessidade de IDE.
 
  ## Tecnologias Utilizadas
 
@@ -83,15 +83,25 @@
      FOREIGN KEY (iduser) REFERENCES usuarios(iduser)
  );
  ```
-## Telas do Sistema
+3. configure para seu banco de dados no "ModuloDeConexao.java"
+### Local
+![Tela de Login](Imagens/configSQL.png)  
 
+5. vá ate o jFrame "TelaLogin.java" e execute o codigo.
+### Local
+![Tela de Login](Imagens/local.png)  
+
+4. logo apos ele irá abrir esta tela.
+5. 
 ### Tela de Login
 ![Tela de Login](Imagens/telaLogin.png)  
-A tela de login permite ao usuário acessar o sistema inserindo suas credenciais.  
-Use:
+Se seu banco de dados estiver correto basta colocar essas informções:
 - **Login**: "admin"
 - **Senha**: "admin"
 
 ### Tela Principal
 ![Tela Principal](Imagens/telaPrincipal.png)  
-A tela principal exibe as opções para o gerenciamento de usuários, clientes e ordens de serviço.
+Ele abrira a tela principal do sistema.
+
+**Atenção:** Este código ainda está em desenvolvimento e pode conter alguns bugs.
+
