@@ -9,7 +9,7 @@
 	import javax.swing.JLabel;
 	import javax.swing.border.EmptyBorder;
 
-import br.com.SistemaOS.Utils.UtilitariosTela;
+import br.com.SistemaOS.Utils.ScreenTools;
 
 import javax.swing.SwingConstants;
 	import javax.swing.JButton;
@@ -28,7 +28,7 @@ import javax.swing.SwingConstants;
 	    private JLabel lblTitulo;
 	    private JTextField valorField;
 	    private JTextField servicoField;
-	    private UtilitariosTela util;
+	    private ScreenTools util;
 	    
 	    public static void main(String[] args) {
 	        EventQueue.invokeLater(new Runnable() {
@@ -44,7 +44,7 @@ import javax.swing.SwingConstants;
 	    }
 	
 	    public DetalhesOS() {
-	    	this.util = new UtilitariosTela();
+	    	this.util = new ScreenTools();
 	        setResizable(false);
 	        setIconImage(Toolkit.getDefaultToolkit().getImage(DetalhesOS.class.getResource("/br/com/SistemaOS/Icones/icon/Logo.png")));
 	        setTitle("Informações");

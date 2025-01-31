@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
-import br.com.SistemaOS.Utils.UtilitariosTela;
+import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.Usuario;
 
 import javax.swing.JPasswordField;
@@ -28,7 +28,7 @@ public class DetalhesUsuario extends JFrame {
 	private static final long serialVersionUID = 1L;
 	//Outras classes
 	private CentroUsuariosDAO dao = new CentroUsuariosDAO();
-	private UtilitariosTela util = new UtilitariosTela();
+	private ScreenTools util = new ScreenTools();
 	
 	//Inforção do Usuario
 	private Integer idUser;

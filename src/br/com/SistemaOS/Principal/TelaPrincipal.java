@@ -20,11 +20,13 @@ import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import br.com.SistemaOS.DAO.CentroOSDAO;
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
 import br.com.SistemaOS.Telas.Detalhes.DetalhesOS;
 import br.com.SistemaOS.Telas.Gerenciamento.GerenciarClientes;
+import br.com.SistemaOS.Telas.Gerenciamento.GerenciarOS;
 import br.com.SistemaOS.Telas.Gerenciamento.GerenciarUsuarios;
-import br.com.SistemaOS.Utils.UtilitariosTela;
+import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.Usuario;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -36,8 +38,9 @@ import java.awt.event.InputEvent;
 public class TelaPrincipal extends JFrame {
 	
     private static final long serialVersionUID = 1L;
-    private UtilitariosTela util = new UtilitariosTela();
-    private CentroUsuariosDAO dao =  new CentroUsuariosDAO();
+    private ScreenTools util = new ScreenTools();
+    private CentroUsuariosDAO userDao =  new CentroUsuariosDAO();
+    private CentroOSDAO osDao = new CentroOSDAO();
     private Usuario user;
 	private JPanel contentPane;
 	private boolean isAdmin;
@@ -147,12 +150,11 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void abrirCadastroCliente() {
-        GerenciarClientes frame = new GerenciarClientes();
-        frame.setVisible(true);
+       new GerenciarClientes().setVisible(true);
     }
 
     private void abrirCadastroOS() {
-        JOptionPane.showMessageDialog(this, "Abrindo cadastro de OS.", "Ordem de Serviço", JOptionPane.INFORMATION_MESSAGE);
+        new GerenciarOS(user).setVisible(true);
     }
 
     private void abrirCadastroUsuarios() {
@@ -164,7 +166,7 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void exibirSobre() {
-        JOptionPane.showMessageDialog(this, "Sistema de Ordem e Serviço - Versão 1.0", "Sobre", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Sistema de Ordem e Serviço - Versão 5.0 \nDesenvolvido Por: ViniciusDizatnikis", "Sobre", JOptionPane.INFORMATION_MESSAGE);
     }
 
    
@@ -200,7 +202,7 @@ public class TelaPrincipal extends JFrame {
 
     private void setUpTable(JPanel contentPane, int userId) {
         String[] columnNames = new String[]{"ID Venda", "Data", "Cliente", "Fone", "Equipamento", "Defeito", "Serviço", "Valor"};
-        Object[][] data = dao.getOrdensEServico(userId);
+        Object[][] data = osDao.getOrdensEServico(userId);
         DefaultTableModel model = new DefaultTableModel(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {

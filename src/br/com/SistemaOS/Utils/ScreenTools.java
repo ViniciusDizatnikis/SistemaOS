@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class UtilitariosTela {
+public class ScreenTools {
     // Constantes para cores e fontes padrão
     private static final Color BACKGROUND_COLOR = new Color(45, 45, 48);
     private static final Color DEFAULT_TEXT_COLOR = Color.WHITE;
@@ -75,7 +75,7 @@ public class UtilitariosTela {
     // Método para redimensionar a imagem
     public ImageIcon mudarTamanhoImg(String img, int largura, int altura) {
         try {
-            ImageIcon imageIcon = new ImageIcon(UtilitariosTela.class.getResource(img));
+            ImageIcon imageIcon = new ImageIcon(ScreenTools.class.getResource(img));
             Image image = imageIcon.getImage();
             Image resizedImage = image.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
             return new ImageIcon(resizedImage);

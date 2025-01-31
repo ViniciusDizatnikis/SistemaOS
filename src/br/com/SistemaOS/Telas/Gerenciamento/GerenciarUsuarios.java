@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
 import br.com.SistemaOS.Telas.Criar.CriarUser;
 import br.com.SistemaOS.Telas.Detalhes.DetalhesUsuario;
-import br.com.SistemaOS.Utils.UtilitariosTela;
+import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.Usuario;
 
 public class GerenciarUsuarios extends JFrame {
@@ -34,7 +34,7 @@ public class GerenciarUsuarios extends JFrame {
     private DefaultTableModel tableModel;
 
     // Classes
-    private UtilitariosTela util = new UtilitariosTela();
+    private ScreenTools util = new ScreenTools();
     private CentroUsuariosDAO dao = new CentroUsuariosDAO();
 
     //user

@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
-import br.com.SistemaOS.Utils.UtilitariosTela;
+import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.Usuario;
 import java.util.logging.*;
 
@@ -30,7 +30,7 @@ public class TelaLogin extends JFrame {
 
     // Dependências
     private final CentroUsuariosDAO dao = new CentroUsuariosDAO();
-    private final UtilitariosTela util = new UtilitariosTela();
+    private final ScreenTools util = new ScreenTools();
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -77,6 +77,11 @@ public class TelaLogin extends JFrame {
         contentPane.add(txtPassword);
         contentPane.add(btnLogin);
         contentPane.add(lblStatus);
+        
+        
+        JButton btn = new JButton("Entrar");
+        util.estilizarBotao(btn);
+        btn.setBounds(centralizarComponente(CAMPO_LARGURA), 345, CAMPO_LARGURA, CAMPO_ALTURA);
 
         JLabel lblByVinicius = new JLabel("by vinicius", SwingConstants.CENTER);
         lblByVinicius.setFont(new Font("Segoe UI", Font.ITALIC, 12));
@@ -104,11 +109,9 @@ public class TelaLogin extends JFrame {
         contentPane.add(lblUsuario);
 
         JTextField txtCampo = new JTextField();
-        txtCampo.setFont(DEFAULT_FONT);
+        util.estilizarField(txtCampo, "");
         txtCampo.setBounds(centralizarComponente(CAMPO_LARGURA), campoPosY, CAMPO_LARGURA, CAMPO_ALTURA);
         txtCampo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        txtCampo.setBackground(INPUT_COLOR);
-        txtCampo.setForeground(Color.WHITE);
         return txtCampo;
     }
 
@@ -130,11 +133,7 @@ public class TelaLogin extends JFrame {
 
     private JButton criarBotaoLogin() {
         JButton btn = new JButton("Entrar");
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        btn.setBackground(new Color(63, 182, 207));
-        btn.setForeground(Color.WHITE);
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        util.estilizarBotao(btn);
         btn.setBounds(centralizarComponente(CAMPO_LARGURA), 345, CAMPO_LARGURA, CAMPO_ALTURA);
         return btn;
     }

@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
-import br.com.SistemaOS.Utils.UtilitariosTela;
+import br.com.SistemaOS.Utils.ScreenTools;
 
 public class CriarUser extends JFrame {
 
@@ -24,7 +24,7 @@ public class CriarUser extends JFrame {
     private JTextField fieldLogin;
     private JTextField fieldSenha;
     private CentroUsuariosDAO dao = new CentroUsuariosDAO();
-    private UtilitariosTela util = new UtilitariosTela();
+    private ScreenTools util = new ScreenTools();
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
