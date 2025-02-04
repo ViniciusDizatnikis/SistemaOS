@@ -46,5 +46,9 @@ public class Cliente {
 		this.email = email;
 	}
 	
+	@Override
+	public String toString() {
+		return this.getNome();
+	}
 	
 }

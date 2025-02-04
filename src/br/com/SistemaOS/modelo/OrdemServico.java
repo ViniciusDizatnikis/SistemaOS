@@ -13,7 +13,6 @@ public class OrdemServico {
     private String tecnico;
     private String contato;
 
-    // Getters e Setters
 
     public String getContato() {
         return contato;
