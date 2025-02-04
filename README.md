@@ -80,19 +80,23 @@
  );
  ```
 3. Configure a conexão com seu banco de dados SQL em "ModuloDeConexao.java"
-   
-![Conexão SQL](Imagens/configSQL.png)  
+
+   ![Conexão SQL](Imagens/configSQL.png)  
 
 
 4. Abra sua IDE com o projeto e procure por "TelaLogin.java" e a execute, é por ela onde começa todo o sistema.
-   
-![Tela de Login](Imagens/telaLogin.png)
 
-Se seu banco de dados estiver configurado corretamente, use essas credenciais para logar:
+![local De Executar](Imagens/local.png)
+
+5. Se seu banco de dados estiver configurado corretamente aparecerá esta tela:
+
+   ![Tela de Login](Imagens/telaLogin.png)
+   
+use essas credenciais para logar:
 - **Login**: "admin"
 - **Senha**: "admin"
 
-5. Ele abrirá a tela principal do sitema. 
+6. Ele abrirá a tela principal do sitema. 
 ![Tela Principal](Imagens/telaPrincipal.png)  
 
 Este projeto ainda está em fase de desenvolvimento e pode conter alguns bugs. Se encontrar algum problema, sinta-se à vontade para abrir uma issue no repositório do GitHub.
