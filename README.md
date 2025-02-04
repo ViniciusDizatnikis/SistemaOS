@@ -4,7 +4,7 @@
 
  ## Objetivo
 
- Explorar e entender os conceitos fundamentais do desenvolvimento de sistemas utilizando:
+ O projeto visa aprender e praticar conceitos básicos de JFrame para criação de interfaces gráficas e SQL para interação com banco de dados, através da implementação de um Sistema de Ordem de Serviço. A ideia é explorar como essas tecnologias podem ser combinadas para desenvolver uma aplicação prática.
 
  - **JFrame** para criar interfaces gráficas simples.
  - **SQL** para interação com banco de dados, realizando operações como inserção, atualização, consulta e exclusão de dados.
@@ -13,10 +13,10 @@
 
  Atualmente, o sistema oferece as seguintes funcionalidades:
 
- - **Cadastro de Usuário**: Permite ao Administrador criar novos Usuários com diferentes permissões (User, Admin).
- - **Consulta e Atualização**: Usuários com permissão de Admin podem verificar e criar novos usuários, mas não podem excluir ou modificar o Admin.
- - **Exclusão de Usuários**: Permite excluir usuários que não são mais necessários.
- - **Verificação de Usuários**: Contém validações para criar usuários sem erros no banco de dados.
+ - **CRUD Usuários**: Permite ao Administrador e aos usuários que tem a permissão "Admin" a criar, editar, deletar e ver usuarios cadastrado no sistema.
+ - **CRUD clientes**: Assim como os usuarios, possui a função para os clientes.
+ - **Validações**: Possui validações para quase todas as possibilidades para que não haja bugs.
+ - Futuramente, o sistema incluirá funcionalidades adicionais como a geração de relatórios e a gestão de ordens de serviço mais complexas
 
  ## Status do Projeto
 
@@ -24,9 +24,9 @@
 
  ## Tecnologias Utilizadas
 
- - **Java** (JDK) - Linguagem principal utilizada no desenvolvimento do sistema.
- - **JFrame** - Biblioteca para criação da interface gráfica.
- - **SQL** - Para a gestão de dados no banco de dados.
+ - **Java** (JDK 8 ou superior)
+ - **JFrame** para a construção da interface gráfica
+ - **MySQL** para a gestão de dados."
 
  ## Como Executar
 
@@ -35,10 +35,6 @@
       git clone [https://github.com/ViniciusDizatnikis/SistemaOS.git](https://github.com/ViniciusDizatnikis/SistemaOS.git)
     ```
  2. Configure seu banco de dados com a estrutura abaixo para que funcione corretamente.
-
- ### Código SQL para Banco de Dados
-
- Você pode copiar o código SQL abaixo para configurar o banco de dados:
 
  ```sql
  -- Criar o banco de dados
@@ -83,48 +79,20 @@
      FOREIGN KEY (iduser) REFERENCES usuarios(iduser)
  );
  ```
-## Telas do Sistema
+3. Configure a conexão com seu banco de dados SQL em "ModuloDeConexao.java"
+   
+![Conexão SQL](Imagens/configSQL.png)  
 
-### Tela de Login
-![Tela de Login](Imagens/telaLogin.png)  
-A tela de login permite ao usuário acessar o sistema inserindo suas credenciais.  
-Use:
+
+4. Abra sua IDE com o projeto e procure por "TelaLogin.java" e a execute, é por ela onde começa todo o sistema.
+   
+![Tela de Login](Imagens/telaLogin.png)
+
+Se seu banco de dados estiver configurado corretamente, use essas credenciais para logar:
 - **Login**: "admin"
 - **Senha**: "admin"
 
-### Tela Principal
+5. Ele abrirá a tela principal do sitema. 
 ![Tela Principal](Imagens/telaPrincipal.png)  
-A tela principal exibe as opções para o gerenciamento de usuários, clientes e ordens de serviço.
-=======
-Este é um projeto simples de **Sistema de Ordem de Serviço** desenvolvido com o objetivo de aprender e praticar conceitos básicos de **JFrame** e **SQL**. O sistema foi construído utilizando apenas ferramentas básicas, sem o uso de frameworks avançados, para proporcionar uma experiência prática e direta de como funciona o desenvolvimento de aplicações com interface gráfica e banco de dados.
 
-## Objetivo
-
-O objetivo deste projeto é explorar e entender os conceitos fundamentais do desenvolvimento de sistemas, utilizando:
-
-- **JFrame** para criar interfaces gráficas simples.
-- **SQL** para interação com banco de dados, realizando operações como inserção, atualização, consulta e exclusão de dados.
-
-## Funcionalidades
-
-Atualmente, o sistema oferece as seguintes funcionalidades:
-
-- **Cadastro de Ordem de Serviço**: Permite ao usuário criar novas ordens de serviço, incluindo detalhes como nome do cliente, descrição do serviço, entre outros.
-- **Consulta e Atualização**: O usuário pode visualizar as ordens de serviço cadastradas e atualizar informações quando necessário.
-- **Exclusão de Ordem de Serviço**: O sistema também permite excluir ordens de serviço que não sejam mais necessárias.
-
-## Status do Projeto
-
-Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcionalidades principais e, em breve, pretendo gerar um **arquivo executável** para facilitar os testes e a execução do sistema sem a necessidade de utilizar uma IDE.
-
-## Tecnologias Utilizadas
-
-- **Java** (JDK) - Linguagem principal utilizada no desenvolvimento do sistema.
-- **JFrame** - Biblioteca para criação da interface gráfica.
-- **SQL** - Para a gestão de dados no banco de dados.
-
-## Como Executar
-
-1. Clone o repositório para o seu computador:
-   ```bash
-   git clone https://github.com/ViniciusDizatnikis/SistemaOS.git
+Este projeto ainda está em fase de desenvolvimento e pode conter alguns bugs. Se encontrar algum problema, sinta-se à vontade para abrir uma issue no repositório do GitHub.
