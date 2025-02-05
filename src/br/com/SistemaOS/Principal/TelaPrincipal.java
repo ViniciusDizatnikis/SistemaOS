@@ -258,7 +258,7 @@ public class TelaPrincipal extends JFrame {
         int rowIndex = table.getSelectedRow();
         if (rowIndex != -1) {
             OrdemServico os = osDao.listarTodasOS(user.getId()).get(rowIndex);
-            DetalhesOS info = new DetalhesOS();
+            DetalhesOS info = new DetalhesOS(false);
             info.exibirDetalhes(os);
             info.setVisible(true);
         }

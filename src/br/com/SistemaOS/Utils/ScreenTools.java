@@ -106,4 +106,18 @@ public class ScreenTools {
         }
         return label;
     }
+    
+    // Método para criar JLabel com texto, posição, tamanho e alinhamento
+ // Método para estilizar um JLabel já existente
+    public void estilizarLabel(JLabel label, int tamanhoFonte, boolean center) {
+        label.setForeground(DEFAULT_TEXT_COLOR);
+        label.setFont(new Font(DEFAULT_FONT.getName(), DEFAULT_FONT.getStyle(), tamanhoFonte));
+
+        if (center) {
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+        } else {
+            label.setHorizontalAlignment(SwingConstants.LEFT);
+        }
+    }
+
     }

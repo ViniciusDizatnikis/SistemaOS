@@ -20,228 +20,217 @@ import br.com.SistemaOS.modelo.Usuario;
 
 public class GerenciarUsuarios extends JFrame {
 
-    private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
 
-    // Pesquisa
-    private JTextField campoPesquisa;
+	// Pesquisa
+	private JTextField campoPesquisa;
 
-    // Botões
-    private JButton btnCriarUsuario;
+	// Botões
+	private JButton btnCriarUsuario;
 
-    // Tabela de Usuários
-    private JTable table;
-    private DefaultTableModel tableModel;
+	// Tabela de Usuários
+	private JTable table;
+	private DefaultTableModel tableModel;
 
-    // Classes
-    private ScreenTools util = new ScreenTools();
-    private CentroUsuariosDAO dao = new CentroUsuariosDAO();
+	// Classes
+	private ScreenTools util = new ScreenTools();
+	private CentroUsuariosDAO dao = new CentroUsuariosDAO();
 
-    //user
-    private Usuario user;
-    
-    // Lista de usuários
-    private List<Usuario> allUsers;
-    
-    private List<Usuario> filteredUsers = new ArrayList<>();
+	// user
+	private Usuario user;
 
-    public GerenciarUsuarios(Usuario usu) {
-        setResizable(false);
-        setTitle("Usuarios");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 1020, 540);
-        setLocationRelativeTo(null);
-        setIconImage(util.getLogo());
+	// Lista de usuários
+	private List<Usuario> allUsers;
 
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setBackground(util.getBackgroundColor());
-        setContentPane(contentPane);
-        contentPane.setLayout(null);
-        
-        this.user = usu;
+	private List<Usuario> filteredUsers = new ArrayList<>();
 
-        initComponents();
+	public GerenciarUsuarios(Usuario usu) {
+		setResizable(false);
+		setTitle("Usuarios");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 1020, 540);
+		setLocationRelativeTo(null);
+		setIconImage(util.getLogo());
 
-        loadUsers();
-    }
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(util.getBackgroundColor());
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 
-    private void initComponents() {
-        initLabels();
-        initTable();
-        initTools();
-        initListeners();
-    }
+		this.user = usu;
 
-    private void initLabels() {
-        contentPane.add(util.criarLabel("Usuários", (this.getWidth()-150)/2, 11, 150, 47, 30, true));
-    }
+		initComponents();
 
-    private void initTable() {
-        tableModel = new DefaultTableModel();
-        table = new JTable(tableModel) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+		loadUsers();
+	}
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(10, 127, 984, 368);
-        contentPane.add(scrollPane);
+	private void initComponents() {
+		initLabels();
+		initTable();
+		initTools();
+		initListeners();
+	}
 
-        table.setRowHeight(25);
-        table.setFillsViewportHeight(true);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	private void initLabels() {
+		contentPane.add(util.criarLabel("Usuários", (this.getWidth() - 150) / 2, 11, 150, 47, 30, true));
+	}
 
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
-                    Usuario selectedUser;
-                    int selectedRow = table.getSelectedRow();
-                    
-                    if (campoPesquisa.getText().equals("Digite o nome..") || campoPesquisa.getText().trim().isEmpty()) {
-                        selectedUser = allUsers.get(selectedRow);
-                    } else {
-                        selectedUser = filteredUsers.get(selectedRow);
-                    }
+	private void initTable() {
+		tableModel = new DefaultTableModel();
+		table = new JTable(tableModel) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-                    DetalhesUsuario userFrame = new DetalhesUsuario(
-                            selectedUser.getId(),
-                            selectedUser.getNome(),
-                            selectedUser.getFone(),
-                            selectedUser.getLogin(),
-                            selectedUser.getSenha(),
-                            selectedUser.getPerfil(),
-                            user);
-                    userFrame.setVisible(true);
-                }
-            }
-        });
-    }
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(10, 127, 984, 368);
+		contentPane.add(scrollPane);
 
+		table.setRowHeight(25);
+		table.setFillsViewportHeight(true);
+		table.getTableHeader().setReorderingAllowed(false);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-    private void initTools() {
-    	
-    	//Pesquisa
-        campoPesquisa = new JTextField("Digite o nome..");
-        campoPesquisa.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
-        campoPesquisa.setBounds(731, 84, 263, 32);
-        contentPane.add(campoPesquisa);
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
+					Usuario selectedUser;
+					int selectedRow = table.getSelectedRow();
 
-        //btnCriarUsuario
-        btnCriarUsuario = new JButton("Criar Usuario");
-        btnCriarUsuario.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        btnCriarUsuario.setBounds(10, 93, 160, 23);
-        btnCriarUsuario.setBackground(new Color(63, 182, 207));
-        btnCriarUsuario.setForeground(Color.WHITE);
-        btnCriarUsuario.setFocusPainted(false);
-        contentPane.add(btnCriarUsuario);
-    }
+					if (campoPesquisa.getText().equals("Digite o nome..") || campoPesquisa.getText().trim().isEmpty()) {
+						selectedUser = allUsers.get(selectedRow);
+					} else {
+						selectedUser = filteredUsers.get(selectedRow);
+					}
 
-    private void initListeners() {
-        btnCriarUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                btnCriarUsuario.setBackground(new Color(33, 116, 133));
-                btnCriarUsuario.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
+					DetalhesUsuario userFrame = new DetalhesUsuario(selectedUser.getId(), selectedUser.getNome(),
+							selectedUser.getFone(), selectedUser.getLogin(), selectedUser.getSenha(),
+							selectedUser.getPerfil(), user);
+					userFrame.setVisible(true);
+				}
+			}
+		});
+	}
 
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                btnCriarUsuario.setBackground(new Color(63, 182, 207));
-                btnCriarUsuario.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
+	private void initTools() {
 
-        btnCriarUsuario.addActionListener(e -> {
-            CriarUser frame = new CriarUser();
-            frame.setVisible(true);
-        });
+		// Pesquisa
+		campoPesquisa = new JTextField("Digite o nome..");
+		campoPesquisa.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
+		campoPesquisa.setBounds(731, 84, 263, 32);
+		contentPane.add(campoPesquisa);
 
-        campoPesquisa.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (campoPesquisa.getText().equals("Digite o nome..")) {
-                    campoPesquisa.setText("");
-                }
-            }
+		// btnCriarUsuario
+		btnCriarUsuario = new JButton("Criar Usuario");
+		btnCriarUsuario.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		btnCriarUsuario.setBounds(10, 93, 160, 23);
+		btnCriarUsuario.setBackground(new Color(63, 182, 207));
+		btnCriarUsuario.setForeground(Color.WHITE);
+		btnCriarUsuario.setFocusPainted(false);
+		contentPane.add(btnCriarUsuario);
+	}
 
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (campoPesquisa.getText().isEmpty()) {
-                    campoPesquisa.setText("Digite o nome..");
-                    loadUsers();
-                }
-            }
-        });
-
-        campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                filterUsers(campoPesquisa.getText().trim());
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                filterUsers(campoPesquisa.getText().trim());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                filterUsers(campoPesquisa.getText().trim());
-            }
-        });
-        
-        addWindowFocusListener(new WindowFocusListener() {
-            @Override
-            public void windowGainedFocus(WindowEvent e) {
-            	campoPesquisa.setText("Digite o nome..");
-            	loadUsers();
-            }
+	private void initListeners() {
+		btnCriarUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				btnCriarUsuario.setBackground(new Color(33, 116, 133));
+				btnCriarUsuario.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
 
 			@Override
-			public void windowLostFocus(WindowEvent e) {			
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				btnCriarUsuario.setBackground(new Color(63, 182, 207));
+				btnCriarUsuario.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
-        });
-    }
+		});
 
-    private void loadUsers() {
-        allUsers = dao.getUsuarios(); 
-        updateTable(allUsers); 
-    }
+		btnCriarUsuario.addActionListener(e -> {
+			CriarUser frame = new CriarUser();
+			frame.setVisible(true);
+		});
 
-    private void updateTable(List<Usuario> data) {
-        String[] columnNames = { "ID", "Nome", "Fone", "Login", "Senha", "Perfil" };
-        Object[][] tableData = new Object[data.size()][columnNames.length];
+		campoPesquisa.addFocusListener(new java.awt.event.FocusAdapter() {
+			@Override
+			public void focusGained(java.awt.event.FocusEvent e) {
+				if (campoPesquisa.getText().equals("Digite o nome..")) {
+					campoPesquisa.setText("");
+				}
+			}
 
-        for (int i = 0; i < data.size(); i++) {
-            Usuario usuario = data.get(i);
-            tableData[i] = new Object[] {
-                usuario.getId(),
-                usuario.getNome(),
-                usuario.getFone(),
-                usuario.getLogin(),
-                "******",
-                usuario.getPerfil()
-            };
-        }
+			@Override
+			public void focusLost(java.awt.event.FocusEvent e) {
+				if (campoPesquisa.getText().isEmpty()) {
+					campoPesquisa.setText("Digite o nome..");
+					loadUsers();
+				}
+			}
+		});
 
-        tableModel.setDataVector(tableData, columnNames);
-    }
+		campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				filterUsers(campoPesquisa.getText().trim());
+			}
 
-    private void filterUsers(String searchText) {
-        if (allUsers == null) return;
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				filterUsers(campoPesquisa.getText().trim());
+			}
 
-        filteredUsers.clear(); 
-        for (Usuario usuario : allUsers) {
-            if (usuario.getNome().toLowerCase().contains(searchText.toLowerCase())) {
-                filteredUsers.add(usuario);
-            }
-        }
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				filterUsers(campoPesquisa.getText().trim());
+			}
+		});
 
-        updateTable(filteredUsers);
-    }
+		addWindowFocusListener(new WindowFocusListener() {
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				campoPesquisa.setText("Digite o nome..");
+				loadUsers();
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+			}
+		});
+	}
+
+	private void loadUsers() {
+		allUsers = dao.getUsuarios();
+		updateTable(allUsers);
+	}
+
+	private void updateTable(List<Usuario> data) {
+		String[] columnNames = { "ID", "Nome", "Fone", "Login", "Senha", "Perfil" };
+		Object[][] tableData = new Object[data.size()][columnNames.length];
+
+		for (int i = 0; i < data.size(); i++) {
+			Usuario usuario = data.get(i);
+			tableData[i] = new Object[] { usuario.getId(), usuario.getNome(), usuario.getFone(), usuario.getLogin(),
+					"******", usuario.getPerfil() };
+		}
+
+		tableModel.setDataVector(tableData, columnNames);
+	}
+
+	private void filterUsers(String searchText) {
+		if (allUsers == null)
+			return;
+
+		filteredUsers.clear();
+		for (Usuario usuario : allUsers) {
+			if (usuario.getNome().toLowerCase().contains(searchText.toLowerCase())) {
+				filteredUsers.add(usuario);
+			}
+		}
+
+		updateTable(filteredUsers);
+	}
 }

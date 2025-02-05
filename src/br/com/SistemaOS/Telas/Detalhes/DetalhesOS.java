@@ -27,6 +27,8 @@ public class DetalhesOS extends JFrame {
 	private JTextField enderecoField;
 	private JTextField EmailField;
 
+	private boolean edit = false;
+
 	private Cliente cli;
 
 	private ScreenTools util = new ScreenTools();
@@ -35,7 +37,7 @@ public class DetalhesOS extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
-				DetalhesOS frame = new DetalhesOS();
+				DetalhesOS frame = new DetalhesOS(false);
 				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -43,10 +45,12 @@ public class DetalhesOS extends JFrame {
 		});
 	}
 
-	public DetalhesOS() {
+	public DetalhesOS(boolean edit) {
+		this.edit = edit;
+
 		// Configuração da janela
 		setTitle("Detalhes da Ordem de Serviço");
-		setIconImage(util.getLogo()); // Adapte o caminho da imagem
+		setIconImage(util.getLogo());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 540);
 		setResizable(false);
@@ -54,153 +58,174 @@ public class DetalhesOS extends JFrame {
 		// Painel de conteúdo
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		contentPane.setBackground(Color.WHITE); // Cor de fundo
+		contentPane.setBackground(util.getBackgroundColor());
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		// Título principal
 		JLabel lblTitulo = new JLabel("Detalhes da Ordem de Serviço");
-		lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
-		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitulo.setBounds(0, 10, 1020, 40);
+		util.estilizarLabel(lblTitulo, 24, true);
+		lblTitulo.setBounds(10, 10, 984, 40);
 		contentPane.add(lblTitulo);
 
 		// ID
 		JLabel lblId = new JLabel("ID:");
-		lblId.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblId.setBounds(29, 61, 100, 25);
+		util.estilizarLabel(lblId, 16, false);
+		lblId.setBounds(75, 92, 30, 25);
 		contentPane.add(lblId);
 
 		idField = new JTextField();
 		idField.setFont(new Font("Arial", Font.PLAIN, 16));
-		idField.setBounds(139, 61, 250, 30);
-		idField.setEditable(false); // Somente leitura
+		util.estilizarField(idField, getName());
+		idField.setEnabled(false);
+		idField.setBounds(115, 87, 162, 30);
+		idField.setEditable(false);
 		contentPane.add(idField);
 
 		// Data
 		JLabel lblData = new JLabel("Data:");
 		lblData.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblData.setBounds(587, 61, 100, 25);
+		util.estilizarLabel(lblData, 16, false);
+		lblData.setBounds(287, 90, 48, 25);
 		contentPane.add(lblData);
 
 		dataField = new JTextField();
-		dataField.setFont(new Font("Arial", Font.PLAIN, 16));
-		dataField.setBounds(697, 61, 250, 30);
-		dataField.setEditable(false); // Somente leitura
+		util.estilizarField(dataField, "");
+		dataField.setBounds(345, 87, 182, 30);
+		dataField.setEnabled(false);
+		dataField.setEditable(false);
 		contentPane.add(dataField);
-
-		// Cliente
-		JLabel lblCliente = new JLabel("Cliente:");
-		lblCliente.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblCliente.setBounds(29, 274, 100, 25);
-		contentPane.add(lblCliente);
-
-		clienteField = new JTextField();
-		clienteField.setFont(new Font("Arial", Font.PLAIN, 16));
-		clienteField.setBounds(139, 274, 250, 30);
-		clienteField.setEditable(false); // Somente leitura
-		contentPane.add(clienteField);
-
-		// Fone
-		JLabel lblFone = new JLabel("Fone:");
-		lblFone.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblFone.setBounds(587, 274, 100, 25);
-		contentPane.add(lblFone);
-
-		foneField = new JTextField();
-		foneField.setFont(new Font("Arial", Font.PLAIN, 16));
-		foneField.setBounds(697, 274, 250, 30);
-		foneField.setEditable(false); // Somente leitura
-		contentPane.add(foneField);
 
 		// Aparelho
 		JLabel lblAparelho = new JLabel("Aparelho:");
-		lblAparelho.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblAparelho.setBounds(29, 110, 100, 25);
+		util.estilizarLabel(lblAparelho, 16, false);
+		lblAparelho.setBounds(26, 139, 79, 25);
 		contentPane.add(lblAparelho);
 
 		aparelhoField = new JTextField();
-		aparelhoField.setFont(new Font("Arial", Font.PLAIN, 16));
-		aparelhoField.setBounds(139, 110, 250, 30);
-		aparelhoField.setEditable(false); // Somente leitura
+		aparelhoField.setBounds(115, 136, 412, 30);
+		aparelhoField.setEditable(false);
+		util.estilizarField(aparelhoField, "");
 		contentPane.add(aparelhoField);
 
 		// Defeito
 		JLabel lblDefeito = new JLabel("Defeito:");
-		lblDefeito.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblDefeito.setBounds(587, 106, 100, 25);
+		util.estilizarLabel(lblDefeito, 16, false);
+		lblDefeito.setBounds(537, 139, 67, 25);
 		contentPane.add(lblDefeito);
 
 		defeitoField = new JTextField();
-		defeitoField.setFont(new Font("Arial", Font.PLAIN, 16));
-		defeitoField.setBounds(697, 106, 250, 30);
-		defeitoField.setEditable(false); // Somente leitura
+		util.estilizarField(defeitoField, "");
+		defeitoField.setBounds(603, 137, 347, 30);
+		defeitoField.setEditable(false);
 		contentPane.add(defeitoField);
 
 		// Serviço
 		JLabel lblServico = new JLabel("Serviço:");
-		lblServico.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblServico.setBounds(29, 160, 100, 25);
+		util.estilizarLabel(lblServico, 16, false);
+		lblServico.setBounds(38, 186, 67, 25);
 		contentPane.add(lblServico);
 
 		servicoField = new JTextField();
-		servicoField.setFont(new Font("Arial", Font.PLAIN, 16));
-		servicoField.setBounds(139, 160, 250, 30);
-		servicoField.setEditable(false); // Somente leitura
+		util.estilizarField(servicoField, "");
+		servicoField.setBounds(115, 184, 412, 30);
+		servicoField.setEditable(false);
 		contentPane.add(servicoField);
+
+		// Cliente
+		JLabel lblCliente = new JLabel("Cliente:");
+		lblCliente.setFont(new Font("Arial", Font.PLAIN, 16));
+		util.estilizarLabel(lblCliente, 16, false);
+		lblCliente.setBounds(38, 310, 67, 25);
+		contentPane.add(lblCliente);
+
+		clienteField = new JTextField();
+		util.estilizarField(clienteField, "");
+		clienteField.setBounds(115, 309, 388, 30);
+		clienteField.setEditable(false);
+		contentPane.add(clienteField);
 
 		// Valor
 		JLabel lblValor = new JLabel("Valor:");
-		lblValor.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblValor.setBounds(587, 151, 100, 25);
+		util.estilizarLabel(lblValor, 16, false);
+		lblValor.setBounds(545, 187, 48, 25);
 		contentPane.add(lblValor);
 
 		valorField = new JTextField();
-		valorField.setFont(new Font("Arial", Font.PLAIN, 16));
-		valorField.setBounds(697, 151, 250, 30);
-		valorField.setEditable(false); // Somente leitura
+		util.estilizarField(valorField, "");
+		valorField.setBounds(603, 184, 347, 30);
+		valorField.setEditable(false);
 		contentPane.add(valorField);
 
-		// Botão de confirmação
-		JButton btnOk = new JButton("Fechar");
-		btnOk.setFont(new Font("Arial", Font.PLAIN, 14));
-		btnOk.setBounds(449, 461, 120, 40);
-		contentPane.add(btnOk);
+		// Cliente----
 
+		JLabel lblClienteTtitle = new JLabel("Cliente");
+		util.estilizarLabel(lblClienteTtitle, 25, true);
+		lblClienteTtitle.setBounds(10, 248, 984, 40);
+		contentPane.add(lblClienteTtitle);
+
+		// Fone
+		JLabel lblFone = new JLabel("Fone:");
+		util.estilizarLabel(lblFone, 16, false);
+		lblFone.setBounds(537, 311, 424, 25);
+		contentPane.add(lblFone);
+
+		foneField = new JTextField();
+		util.estilizarField(foneField, "");
+		foneField.setBounds(595, 309, 366, 30);
+		foneField.setEditable(false);
+		contentPane.add(foneField);
+
+		// Endereço
 		JLabel lblEndereco = new JLabel("Endereço:");
-		lblEndereco.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblEndereco.setBounds(29, 333, 100, 25);
+		util.estilizarLabel(lblEndereco, 16, false);
+		lblEndereco.setBounds(26, 369, 79, 25);
 		contentPane.add(lblEndereco);
 
 		enderecoField = new JTextField();
-		enderecoField.setFont(new Font("Arial", Font.PLAIN, 16));
+		util.estilizarField(enderecoField, "");
 		enderecoField.setEditable(false);
-		enderecoField.setBounds(139, 333, 250, 30);
+		enderecoField.setBounds(115, 366, 388, 30);
 		contentPane.add(enderecoField);
-		
+
+		// Email
 		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblEmail.setBounds(587, 338, 100, 25);
+		util.estilizarLabel(lblEmail, 16, false);
+		lblEmail.setBounds(537, 372, 424, 25);
 		contentPane.add(lblEmail);
-		
+
 		EmailField = new JTextField();
-		EmailField.setFont(new Font("Arial", Font.PLAIN, 16));
+		util.estilizarField(EmailField, "");
 		EmailField.setEditable(false);
-		EmailField.setBounds(697, 338, 250, 30);
+		EmailField.setBounds(595, 370, 366, 30);
 		contentPane.add(EmailField);
-		
+
+		// Botão de confirmação
+		JButton btnOk = new JButton("Fechar");
+		util.estilizarBotao(btnOk);
+		btnOk.setBounds((this.getWidth() - 120) / 2, 450, 120, 40);
+		contentPane.add(btnOk);
+
+		verificacaoDeEditavel();
+
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose(); // Fechar a janela
+				dispose();
 			}
 		});
 
-		setLocationRelativeTo(null); // Centralizar a janela
+		setLocationRelativeTo(null);
+	}
+
+	private void verificacaoDeEditavel() {
+		aparelhoField.setEnabled(edit);
+		defeitoField.setEnabled(edit);
+		servicoField.setEnabled(edit);
+		valorField.setEditable(edit);
 	}
 
 	// Método para exibir os detalhes
 	public void exibirDetalhes(OrdemServico os) {
-		// Exibir detalhes na interface gráfica
 		idField.setText(String.valueOf(os.getOs()));
 		dataField.setText(os.getData());
 		clienteField.setText(os.getCliente());
@@ -210,24 +235,10 @@ public class DetalhesOS extends JFrame {
 		servicoField.setText(os.getServico());
 		valorField.setText(String.valueOf(os.getValor()));
 
-		// Carregar os dados do cliente
 		cli = clienteDAO.pesquisarClientePorId(os.getIdCliente());
 		if (cli != null) {
 			enderecoField.setText(cli.getEndereco());
 			EmailField.setText(cli.getEmail());
 		}
-
-		// Imprimir os valores no console
-		System.out.println("ID: " + os.getOs());
-		System.out.println("Data: " + os.getData());
-		System.out.println("Cliente: " + os.getCliente());
-		System.out.println("Contato: " + os.getContato());
-		System.out.println("Equipamento: " + os.getEquipamento());
-		System.out.println("Defeito: " + os.getDefeito());
-		System.out.println("Serviço: " + os.getServico());
-		System.out.println("Valor: " + os.getValor());
-		System.out.println("IdCliente: " + os.getIdCliente());
-		System.out.println("Endereço do cliente: " + (cli != null ? cli.getEndereco() : "N/A"));
-		System.out.println("Email do cliente: " + (cli != null ? cli.getEmail() : "N/A"));
 	}
 }
