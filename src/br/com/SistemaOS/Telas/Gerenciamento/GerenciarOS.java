@@ -166,7 +166,6 @@ public class GerenciarOS extends JFrame {
 	private void atualizarTabela(List<OrdemServico> ordensServico) {
 		String[] colunas = { "ID OS", "Data", "Equipamento", "Defeito", "Valor", "Cliente", "Técnico" };
 		Object[][] dadosTabela = new Object[ordensServico.size()][colunas.length];
-
 		for (int i = 0; i < ordensServico.size(); i++) {
 			OrdemServico os = ordensServico.get(i);
 			dadosTabela[i] = new Object[] { os.getOs(), os.getData(), os.getEquipamento(), os.getDefeito(),
@@ -177,22 +176,22 @@ public class GerenciarOS extends JFrame {
 	}
 
 	private void filtrarOS(String textoPesquisa) {
-		if (textoPesquisa.trim().isEmpty()) {
-			carregarOS();
-			return;
-		}
+	    if (textoPesquisa.trim().isEmpty()) {
+	        carregarOS();
+	        return;
+	    }
 
+	    osFiltradas.clear(); 
 
-		for (OrdemServico os : listaTodasOS) {
-			if ((os.getEquipamento() != null && os.getEquipamento().toLowerCase().contains(textoPesquisa.toLowerCase()))
-					|| (os.getTecnico() != null
-							&& os.getTecnico().toLowerCase().contains(textoPesquisa.toLowerCase()))
-					|| (os.getCliente() != null
-							&& os.getCliente().toLowerCase().contains(textoPesquisa.toLowerCase()))) {
-				osFiltradas.add(os);
-			}
-		}
+	    for (OrdemServico os : listaTodasOS) {
+	        if ((os.getEquipamento() != null && os.getEquipamento().toLowerCase().contains(textoPesquisa.toLowerCase()))
+	                || (os.getTecnico() != null && os.getTecnico().toLowerCase().contains(textoPesquisa.toLowerCase()))
+	                || (os.getCliente() != null && os.getCliente().toLowerCase().contains(textoPesquisa.toLowerCase()))) {
+	            osFiltradas.add(os);
+	        }
+	    }
 
-		atualizarTabela(osFiltradas);
+	    atualizarTabela(osFiltradas);
 	}
+
 }
