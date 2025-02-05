@@ -15,7 +15,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import br.com.SistemaOS.DAO.CentroOSDAO;
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
-import br.com.SistemaOS.Telas.Detalhes.DetalhesOS;
+import br.com.SistemaOS.Telas.Criar.CriarCliente;
+import br.com.SistemaOS.Telas.Detalhes.DetalhesOrdemServico;
 import br.com.SistemaOS.Telas.Gerenciamento.GerenciarClientes;
 import br.com.SistemaOS.Telas.Gerenciamento.GerenciarOS;
 import br.com.SistemaOS.Telas.Gerenciamento.GerenciarUsuarios;
@@ -31,7 +32,7 @@ public class TelaPrincipal extends JFrame {
     private CentroOSDAO osDao = new CentroOSDAO();
     private Usuario user;
     private JPanel contentPane;
-    private boolean isAdmin;
+    private boolean isAdmin, isAdministrador;
     private JLabel status;
     private static final Color SUCCESS_COLOR = new Color(46, 204, 113);
     private static final Color ERROR_COLOR = new Color(231, 76, 60);
@@ -41,6 +42,7 @@ public class TelaPrincipal extends JFrame {
     public TelaPrincipal(Usuario usuInfo) {
         this.user = usuInfo;
         this.isAdmin = usuInfo.getPerfil().equals("admin");
+        this.isAdministrador = usuInfo.getNome().equals("Administrador");
 
         setUpFrame();
         setUpMenuBar(isAdmin);
@@ -60,7 +62,7 @@ public class TelaPrincipal extends JFrame {
         addWindowFocusListener(new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
-                carregarDados(model); // Atualizar dados da tabela
+                carregarDados(model); 
             }
 
             @Override
@@ -76,10 +78,9 @@ public class TelaPrincipal extends JFrame {
         JMenu menuCadastro = new JMenu("Cadastro");
         menuBar.add(menuCadastro);
 
-        JMenuItem menuClientes = new JMenuItem("Clientes");
+        JMenuItem menuClientes = new JMenuItem(isAdmin? "Clientes": "Criar Cliente");
         menuClientes.setAccelerator(KeyStroke.getKeyStroke("control C"));
         menuClientes.addActionListener(e -> abrirCadastroCliente());
-        menuClientes.setEnabled(isAdmin);
         menuCadastro.add(menuClientes);
 
         JMenuItem menuOS = new JMenuItem("OS");
@@ -125,7 +126,11 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void abrirCadastroCliente() {
-        new GerenciarClientes().setVisible(true);
+    	if(isAdmin) {
+    		new GerenciarClientes().setVisible(true);
+    	}else {
+    		new CriarCliente().setVisible(true);
+    	}
     }
 
     private void abrirCadastroOS() {
@@ -175,8 +180,10 @@ public class TelaPrincipal extends JFrame {
         setUpUserIcon(contentPane);
         setUpUserDetails(contentPane);
         setUpDateAndTimePanel();
+        
+        String TextPainel = isAdmin? "Ordens E Serviço da Empresa": "Suas Ordens E serviços";
 
-        JLabel lblTexto = new JLabel("Suas Ordens e Serviços");
+        JLabel lblTexto = new JLabel(TextPainel);
         lblTexto.setForeground(Color.WHITE);
         lblTexto.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 61));
         lblTexto.setHorizontalAlignment(SwingConstants.LEFT);
@@ -232,7 +239,7 @@ public class TelaPrincipal extends JFrame {
         // Limpa os dados antigos antes de carregar os novos
         model.setRowCount(0);
 
-        List<OrdemServico> data = osDao.listarTodasOS(user.getId());
+        List<OrdemServico> data = isAdministrador? osDao.listarTodasOs() :osDao.listarOsComId(user.getId());
 
         for (OrdemServico os : data) {
             model.addRow(new Object[] {
@@ -257,12 +264,18 @@ public class TelaPrincipal extends JFrame {
     private void inspectItem(JTable table) {
         int rowIndex = table.getSelectedRow();
         if (rowIndex != -1) {
-            OrdemServico os = osDao.listarTodasOS(user.getId()).get(rowIndex);
-            DetalhesOS info = new DetalhesOS(false);
+            OrdemServico os;
+            if (isAdministrador) {
+                os = (OrdemServico) osDao.listarTodasOs().get(rowIndex);
+            } else {
+                os = osDao.listarOsComId(user.getId()).get(rowIndex);
+            }
+            DetalhesOrdemServico info = new DetalhesOrdemServico(false);
             info.exibirDetalhes(os);
             info.setVisible(true);
         }
     }
+
 
     private void setUpUserIcon(JPanel contentPane) {
         JLabel usuarioIcon = new JLabel();

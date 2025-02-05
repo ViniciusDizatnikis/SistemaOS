@@ -119,31 +119,42 @@ public class CriarOrdemServico extends JFrame {
 		contentPane.add(btnCriar);
 
 		btnCriar.addActionListener(e -> {
-			String equipamento = fieldEquipamento.getText().trim();
-			String defeito = fieldDefeito.getText().trim();
-			String servico = fieldServico.getText().trim();
-			String valor = fieldValor.getText().trim();
+		    String equipamento = fieldEquipamento.getText().trim();
+		    String defeito = fieldDefeito.getText().trim();
+		    String servico = fieldServico.getText().trim();
+		    String valor = fieldValor.getText().trim();
 
-			BigDecimal valorDecimal = null;
-			try {
-				valorDecimal = new BigDecimal(valor);
-			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Por favor, insira um valor válido.");
-				return; 
-			}
+		    BigDecimal valorDecimal = null;
+		    try {
+		        valorDecimal = new BigDecimal(valor);
+		    } catch (NumberFormatException ex) {
+		        JOptionPane.showMessageDialog(this, "Por favor, insira um valor válido.");
+		        return; 
+		    }
 
-			Cliente clienteSelecionado = (Cliente) comboBoxClientes.getSelectedItem();
-			Integer idCliente = clienteSelecionado.getId();
+		    // Verificar se o item selecionado é um Cliente
+		    Object itemSelecionado = comboBoxClientes.getSelectedItem();
+		    if (itemSelecionado == null || itemSelecionado instanceof String) {
+		        JOptionPane.showMessageDialog(this, "Por favor, selecione um cliente.");
+		        return;
+		    }
 
-			if (isCampoVazio(equipamento, defeito, servico, valor, idCliente)) {
-				JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.");
-				return;
-			}
+		    Cliente clienteSelecionado = (Cliente) itemSelecionado;
+		    Integer idCliente = clienteSelecionado.getId();
 
-			criarOrdemServico(equipamento, defeito, servico, valorDecimal, idCliente, user);
-			JOptionPane.showMessageDialog(this, "Ordem de Serviço criada com sucesso!");
-			this.dispose();
+		    // Verificar se algum campo está vazio
+		    if (isCampoVazio(equipamento, defeito, servico, valor, idCliente)) {
+		        JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.");
+		        return;
+		    }
+
+		    // Criar Ordem de Serviço
+		    criarOrdemServico(equipamento, defeito, servico, valorDecimal, idCliente, user);
+		    JOptionPane.showMessageDialog(this, "Ordem de Serviço criada com sucesso!");
+		    this.dispose();
 		});
+
+
 		
 		fieldValor.getDocument().addDocumentListener(new DocumentListener() {
 

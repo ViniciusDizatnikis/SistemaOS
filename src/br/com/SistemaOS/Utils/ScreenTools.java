@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class ScreenTools {
     // Constantes para cores e fontes padrão
@@ -77,6 +78,34 @@ public class ScreenTools {
         botao.setBorder(javax.swing.BorderFactory.createLineBorder(BUTTON_BORDER_COLOR));
         botao.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
+    
+    public void formatarCelular(JTextField field) {
+        // Obter o texto atual e remover caracteres não numéricos
+        String texto = field.getText().replaceAll("[^\\d]", ""); 
+
+        // Variável textoFormatado deve ser final ou efetivamente final
+        final String textoFormatado;
+
+        if (texto.length() <= 2) {
+            textoFormatado = texto; // Apenas o DDD
+        } else if (texto.length() <= 6) {
+            textoFormatado = "(" + texto.substring(0, 2) + ") " + texto.substring(2); // DDD + primeira parte do número
+        } else if (texto.length() <= 10) {
+            textoFormatado = "(" + texto.substring(0, 2) + ") " + texto.substring(2, 7) + "-" + texto.substring(7); // DDD + primeira e segunda parte
+        } else {
+            textoFormatado = "(" + texto.substring(0, 2) + ") " + texto.substring(2, 7) + "-" + texto.substring(7, 11); // Máscara completa
+        }
+
+        // Usar invokeLater para evitar a modificação do texto durante a notificação
+        SwingUtilities.invokeLater(() -> {
+            // Só aplicar o setText se o texto formatado for diferente do atual
+            if (!field.getText().equals(textoFormatado)) {
+                field.setText(textoFormatado);
+            }
+        });
+    }
+
+
 
     // Método para redimensionar a imagem
     public ImageIcon mudarTamanhoImg(String img, int largura, int altura) {

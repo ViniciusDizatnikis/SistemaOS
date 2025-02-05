@@ -11,6 +11,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import br.com.SistemaOS.DAO.CentroOSDAO;
 import br.com.SistemaOS.Telas.Criar.CriarOrdemServico;
+import br.com.SistemaOS.Telas.Detalhes.DetalhesOrdemServico;
 import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.OrdemServico;
 import br.com.SistemaOS.modelo.Usuario;
@@ -29,12 +30,14 @@ public class GerenciarOS extends JFrame {
 	private ScreenTools screenTools = new ScreenTools();
 	private CentroOSDAO osDAO = new CentroOSDAO();
 
-	private Usuario usuarioLogado;
+	private Usuario user;
+	private boolean isAdmin; 
 	private List<OrdemServico> listaTodasOS;
 	private List<OrdemServico> osFiltradas = new ArrayList<>();
 
 	public GerenciarOS(Usuario user) {
-		this.usuarioLogado = user;
+		this.user = user;
+		this.isAdmin = user.getNome().equals("Administrador");
 		setResizable(false);
 		setTitle("Ordens de Serviço");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -61,7 +64,7 @@ public class GerenciarOS extends JFrame {
 
 	private void inicializarLabels() {
 		painelPrincipal
-				.add(screenTools.criarLabel("Ordens de Serviço", (this.getWidth() - 200) / 2, 11, 200, 47, 30, true));
+				.add(screenTools.criarLabel(isAdmin?"Ordens de Serviço Da Empresa": "Suas Ordens e Serviços", (this.getWidth() - 600) / 2, 11, 600, 47, 30, true));
 	}
 
 	private void inicializarTabela() {
@@ -83,14 +86,32 @@ public class GerenciarOS extends JFrame {
 		tabelaOS.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		tabelaOS.addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
-			public void mouseClicked(java.awt.event.MouseEvent e) {
-				if (e.getClickCount() == 2 && tabelaOS.getSelectedRow() != -1) {
-					JOptionPane.showMessageDialog(null, "Detalhes da OS ainda não implementados.");
-				}
-			}
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent e) {
+		        if (e.getClickCount() == 2 && tabelaOS.getSelectedRow() != -1) {
+		            // Passar a lista filtrada se houver pesquisa, caso contrário, lista completa
+		            List<OrdemServico> listaAtual = osFiltradas.isEmpty() ? listaTodasOS : osFiltradas;
+		            inspectItem(listaAtual);
+		        }
+		    }
 		});
+
+
 	}
+	
+	
+	
+	private void inspectItem(List<OrdemServico> ordensServico) {
+	    int rowIndex = tabelaOS.getSelectedRow();
+	    if (rowIndex != -1) {
+	        OrdemServico osSelecionada = ordensServico.get(rowIndex);
+
+	        DetalhesOrdemServico detalhesFrame = new DetalhesOrdemServico(true);
+	        detalhesFrame.exibirDetalhes(osSelecionada);
+	        detalhesFrame.setVisible(true);
+	    }
+	}
+
 
 	private void inicializarFerramentas() {
 		campoPesquisa = new JTextField("Digite o equipamento ou técnico...");
@@ -107,7 +128,7 @@ public class GerenciarOS extends JFrame {
 
 	private void inicializarListeners() {
 		botaoCriarOS.addActionListener(e -> {
-			CriarOrdemServico frame = new CriarOrdemServico(usuarioLogado);
+			CriarOrdemServico frame = new CriarOrdemServico(user);
 			frame.setVisible(true);
 		});
 		
@@ -159,16 +180,16 @@ public class GerenciarOS extends JFrame {
 	}
 
 	private void carregarOS() {
-		listaTodasOS = osDAO.listarTodasOS(usuarioLogado.getId());
+		listaTodasOS = isAdmin? osDAO.listarTodasOs(): osDAO.listarOsComId(user.getId());
 		atualizarTabela(listaTodasOS);
 	}
 
 	private void atualizarTabela(List<OrdemServico> ordensServico) {
-		String[] colunas = { "ID OS", "Data", "Equipamento", "Defeito", "Valor", "Cliente", "Técnico" };
+		String[] colunas = { "ID OS", "Data", "Equipamento", "Defeito","servico", "Valor", "Cliente", "Técnico" };
 		Object[][] dadosTabela = new Object[ordensServico.size()][colunas.length];
 		for (int i = 0; i < ordensServico.size(); i++) {
 			OrdemServico os = ordensServico.get(i);
-			dadosTabela[i] = new Object[] { os.getOs(), os.getData(), os.getEquipamento(), os.getDefeito(),
+			dadosTabela[i] = new Object[] { os.getOs(), os.getData(), os.getEquipamento(), os.getDefeito(), os.getServico(),
 					os.getValor(), os.getCliente(), os.getTecnico() };
 		}
 

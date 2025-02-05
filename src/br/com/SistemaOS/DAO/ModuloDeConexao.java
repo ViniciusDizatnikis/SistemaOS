@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class ModuloDeConexao {
     public static Connection conector() {
         Connection con = null;
-        String url = "jdbc:mysql://localhost:3306/sistemaOS";
-        String user = "root"; 
-        String password = "12345678";
+        String url = "jdbc:mysql://localhost:3306/sistemaOS?characterEncoding=utf-8";
+        String user = "dba"; 
+        String password = "SistemaOS@1234";
 
         try {
         	Class.forName("com.mysql.cj.jdbc.Driver");

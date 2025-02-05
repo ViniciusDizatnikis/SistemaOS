@@ -15,6 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import br.com.SistemaOS.DAO.CentroClientesDAO;
 import br.com.SistemaOS.Utils.ScreenTools;
 
@@ -28,7 +31,7 @@ public class CriarCliente extends JFrame {
 
 	private JTextField fieldNome;
 	private JTextField fieldEndereco;
-	private JTextField fieldTelefone;
+	private JTextField fieldFone;
 	private JTextField fieldEmail;
 
 	public CriarCliente() {
@@ -101,11 +104,32 @@ public class CriarCliente extends JFrame {
 		lblTelefone.setBounds(504, 181, 150, 30);
 		contentPane.add(lblTelefone);
 
-		fieldTelefone = new JTextField();
-		util.estilizarField(fieldTelefone, "");
-		fieldTelefone.setBounds(504, 221, 440, 35);
-		contentPane.add(fieldTelefone);
+		fieldFone = new JTextField();
+		util.estilizarField(fieldFone, "");
+		fieldFone.setBounds(504, 221, 440, 35);
+		contentPane.add(fieldFone);
 
+		fieldFone.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				util.formatarCelular(fieldFone);
+				
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setForeground(Color.WHITE);
 		lblEmail.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -129,7 +153,7 @@ public class CriarCliente extends JFrame {
 	private void validarEProcessarCadastro() {
 		String nome = fieldNome.getText().trim();
 		String endereco = fieldEndereco.getText().trim();
-		String telefone = fieldTelefone.getText().trim();
+		String telefone = fieldFone.getText().trim();
 		String email = fieldEmail.getText().trim();
 
 		endereco = endereco.isEmpty() ? "" : endereco;

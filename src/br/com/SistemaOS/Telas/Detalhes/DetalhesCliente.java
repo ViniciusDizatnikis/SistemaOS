@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import br.com.SistemaOS.DAO.CentroClientesDAO;
 import br.com.SistemaOS.Utils.ScreenTools;
@@ -181,7 +183,8 @@ public class DetalhesCliente extends JFrame {
 		contentPane.add(btnExcluir);
 
 		btnExcluir.addActionListener(e -> {
-			int confirmacao = JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir este Cliente?",
+			int confirmacao = JOptionPane.showConfirmDialog(null,
+					"Tem certeza de que deseja excluir este Cliente?\nTodas as ordem e serviços relacioanadas serão apagadas",
 					"Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			if (confirmacao == JOptionPane.YES_OPTION) {
@@ -192,6 +195,22 @@ public class DetalhesCliente extends JFrame {
 			}
 		});
 
+		foneField.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				util.formatarCelular(foneField); // Formata o celular quando o texto é inserido
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+		});
+
 		btnSalvarESair.addActionListener(e -> {
 			fecharJanela();
 		});
@@ -199,7 +218,7 @@ public class DetalhesCliente extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				fecharJanela();
+				dispose();
 			}
 		});
 

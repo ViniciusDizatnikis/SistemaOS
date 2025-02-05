@@ -1,10 +1,8 @@
-package br.com.SistemaOS.Principal;
+package br.com.SistemaOS.Utils;
 
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
-
-import br.com.SistemaOS.Utils.ScreenTools;
 
 public class CustomDialog extends JDialog {
 

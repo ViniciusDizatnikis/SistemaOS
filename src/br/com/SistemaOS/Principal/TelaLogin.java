@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
+import br.com.SistemaOS.Utils.CustomDialog;
 import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.Usuario;
 import java.util.logging.*;
