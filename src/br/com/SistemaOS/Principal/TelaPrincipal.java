@@ -2,12 +2,13 @@ package br.com.SistemaOS.Principal;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,6 +32,11 @@ public class TelaPrincipal extends JFrame {
     private Usuario user;
     private JPanel contentPane;
     private boolean isAdmin;
+    private JLabel status;
+    private static final Color SUCCESS_COLOR = new Color(46, 204, 113);
+    private static final Color ERROR_COLOR = new Color(231, 76, 60);
+    
+    private DefaultTableModel model;
 
     public TelaPrincipal(Usuario usuInfo) {
         this.user = usuInfo;
@@ -42,12 +48,25 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void setUpFrame() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(TelaPrincipal.class.getResource("/br/com/SistemaOS/Icones/icon/Logo.png")));
+        setIconImage(Toolkit.getDefaultToolkit()
+                .getImage(TelaPrincipal.class.getResource("/br/com/SistemaOS/Icones/icon/Logo.png")));
         setTitle("Sistema De Ordem e Serviço");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1360, 720);
         setLocationRelativeTo(null);
         setResizable(false);
+
+        // Atualizar a tabela quando a janela ganhar o foco
+        addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                carregarDados(model); // Atualizar dados da tabela
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+            }
+        });
     }
 
     private void setUpMenuBar(boolean isAdmin) {
@@ -118,15 +137,19 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void gerarRelatorioServicos() {
-        JOptionPane.showMessageDialog(this, "Gerando relatório de serviços.", "Relatórios", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Gerando relatório de serviços.", "Relatórios",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void exibirSobre() {
-        JOptionPane.showMessageDialog(this, "Sistema de Ordem e Serviço - Versão 5.0 \nDesenvolvido Por: ViniciusDizatnikis", "Sobre", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this,
+                "Sistema de Ordem e Serviço - Versão 5.0 \nDesenvolvido Por: ViniciusDizatnikis", "Sobre",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void logOffAction() {
-        int confirmacao = JOptionPane.showConfirmDialog(this, "Deseja fazer logoff?", "Confirmação", JOptionPane.YES_NO_OPTION);
+        int confirmacao = JOptionPane.showConfirmDialog(this, "Deseja fazer logoff?", "Confirmação",
+                JOptionPane.YES_NO_OPTION);
         if (confirmacao == JOptionPane.YES_OPTION) {
             new TelaLogin().setVisible(true);
             this.dispose();
@@ -134,7 +157,8 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void sairAction() {
-        int confirmacao = JOptionPane.showConfirmDialog(this, "Tem certeza de que deseja sair do sistema?", "Sair", JOptionPane.YES_NO_OPTION);
+        int confirmacao = JOptionPane.showConfirmDialog(this, "Tem certeza de que deseja sair do sistema?", "Sair",
+                JOptionPane.YES_NO_OPTION);
         if (confirmacao == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
@@ -147,7 +171,7 @@ public class TelaPrincipal extends JFrame {
         contentPane.setLayout(null);
         setContentPane(contentPane);
 
-        setUpTable(contentPane, usuInfo.getId());
+        setUpTable();
         setUpUserIcon(contentPane);
         setUpUserDetails(contentPane);
         setUpDateAndTimePanel();
@@ -158,20 +182,31 @@ public class TelaPrincipal extends JFrame {
         lblTexto.setHorizontalAlignment(SwingConstants.LEFT);
         lblTexto.setBounds(10, 0, 927, 82);
         contentPane.add(lblTexto);
+
+        status = new JLabel("<dynamic>");
+        status.setHorizontalAlignment(SwingConstants.CENTER);
+        status.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        status.setForeground(Color.WHITE);
+        status.setBounds(947, 623, 387, 25);
+        contentPane.add(status);
     }
 
-    private void setUpTable(JPanel contentPane, int userId) {
-        String[] columnNames = new String[]{"ID Venda", "Data", "Equipamento", "Defeito", "Serviço", "Técnico", "Valor", "ID Cliente"};
+    private void atualizarStatus() {
+        boolean conectado = userDao.getStatus();
+        String mensagem = conectado ? "Status: Conectado ao banco de dados"
+                : "Status: Erro ao conectar ao banco de dados";
+        Color cor = conectado ? SUCCESS_COLOR : ERROR_COLOR;
 
-        List<OrdemServico> data = osDao.listarTodasOS(userId);
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        status.setText(mensagem);
+        status.setForeground(cor);
+    }
 
-        for (OrdemServico os : data) {
-            model.addRow(new Object[]{
-                os.getOs(), os.getData(), os.getEquipamento(), os.getDefeito(),
-                os.getServico(), os.getTecnico(), os.getValor(), os.getCliente()
-            });
-        }
+    private void setUpTable() {
+        String[] columnNames = new String[] { "ID Venda", "Data", "Equipamento", "Defeito", "Serviço", "Valor",
+                "Cliente", "Técnico(a)" };
+
+        model = new DefaultTableModel(columnNames, 0);
+        carregarDados(model);
 
         JTable table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -193,6 +228,26 @@ public class TelaPrincipal extends JFrame {
         });
     }
 
+    private void carregarDados(DefaultTableModel model) {
+        // Limpa os dados antigos antes de carregar os novos
+        model.setRowCount(0);
+
+        List<OrdemServico> data = osDao.listarTodasOS(user.getId());
+
+        for (OrdemServico os : data) {
+            model.addRow(new Object[] {
+                os.getOs(), 
+                os.getData(), 
+                os.getEquipamento(), 
+                os.getDefeito(), 
+                os.getServico(),
+                os.getValor(),
+                os.getCliente(),
+                os.getTecnico()
+            });
+        }
+    }
+
     private void setUpTablePopupMenu(JTable table, JPopupMenu popupMenu) {
         JMenuItem inspecionarItem = new JMenuItem("Inspecionar");
         inspecionarItem.addActionListener(e -> inspectItem(table));
@@ -202,12 +257,9 @@ public class TelaPrincipal extends JFrame {
     private void inspectItem(JTable table) {
         int rowIndex = table.getSelectedRow();
         if (rowIndex != -1) {
-            Object[] rowData = new Object[table.getColumnCount()];
-            for (int i = 0; i < table.getColumnCount(); i++) {
-                rowData[i] = table.getValueAt(rowIndex, i);
-            }
+            OrdemServico os = osDao.listarTodasOS(user.getId()).get(rowIndex);
             DetalhesOS info = new DetalhesOS();
-            info.exibirDetalhes(rowData);
+            info.exibirDetalhes(os);
             info.setVisible(true);
         }
     }
@@ -221,10 +273,10 @@ public class TelaPrincipal extends JFrame {
     }
 
     private void setUpUserDetails(JPanel contentPane) {
-    	String splitName = user.getNome();
-    	if (user.getNome().contains(" ")) {
-    		splitName = splitName.split(" ")[0];
-		}
+        String splitName = user.getNome();
+        if (user.getNome().contains(" ")) {
+            splitName = splitName.split(" ")[0];
+        }
         JLabel lblUsuario = new JLabel(splitName);
         lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
         lblUsuario.setForeground(Color.WHITE);
@@ -236,7 +288,7 @@ public class TelaPrincipal extends JFrame {
     private void setUpDateAndTimePanel() {
         JPanel desktopPanel_1 = new JPanel();
         desktopPanel_1.setBackground(Color.GRAY);
-        desktopPanel_1.setBounds(947, 576, 387, 71);
+        desktopPanel_1.setBounds(947, 550, 387, 71);
         contentPane.add(desktopPanel_1);
         desktopPanel_1.setLayout(null);
 
@@ -267,18 +319,19 @@ public class TelaPrincipal extends JFrame {
         horaSource.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 20));
         horaSource.setBounds(193, 34, 189, 26);
         desktopPanel_1.add(horaSource);
-        
+
         JLabel lblSaudacao = new JLabel("<dynamic>");
         lblSaudacao.setHorizontalAlignment(SwingConstants.CENTER);
         lblSaudacao.setForeground(Color.WHITE);
         lblSaudacao.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 32));
         lblSaudacao.setBounds(947, 99, 387, 51);
         contentPane.add(lblSaudacao);
-        
+
         Timer timerClock = new Timer(1000, e -> {
-        	lblSaudacao.setText(util.getSaudacao());
+            lblSaudacao.setText(util.getSaudacao());
             dataSource.setText(util.getDataAtual());
             horaSource.setText(util.getHoraAtual());
+            atualizarStatus();
         });
         timerClock.start();
     }

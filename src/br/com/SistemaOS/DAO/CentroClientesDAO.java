@@ -86,17 +86,51 @@ public class CentroClientesDAO {
     }
     
     public void deletarCliente(int id) {
-        String sql = "DELETE FROM clientes WHERE idcliente = ?";
+        String sql = "DELETE FROM tbos WHERE idcliente = ?";
+        
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erro ao deletar ordem de serviço: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        sql = "DELETE FROM clientes WHERE idcliente = ?";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, id);
-
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erro ao deletar cliente: " + e.getMessage());
             e.printStackTrace();
         }
     }
+    
+    public Cliente pesquisarClientePorId(int id) {
+        String sql = "SELECT * FROM clientes WHERE idCliente = ?";
+        Cliente cliente = null;
+
+        try (PreparedStatement pstm = con.prepareStatement(sql)) {
+            pstm.setInt(1, id);  
+            ResultSet rs = pstm.executeQuery(); 
+
+            if (rs.next()) {  
+                cliente = new Cliente();
+                cliente.setId(rs.getInt("idCliente"));
+                cliente.setNome(rs.getString("nome"));
+                cliente.setEndereco(rs.getString("endereco"));
+                cliente.setFone(rs.getString("fone"));
+                cliente.setEmail(rs.getString("email"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cliente; 
+    }
+
 
     
     

@@ -208,13 +208,13 @@ public class DetalhesCliente extends JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (enderecoField.getText().isEmpty()) {
-					enderecoField.setText("Não Informado");
+					enderecoField.setText("Não informado");
 				}
 			}
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (enderecoField.getText().equals("Não Informado")) {
+				if (enderecoField.getText().equals("Não informado")) {
 					enderecoField.setText("");
 				}
 			}
@@ -225,13 +225,13 @@ public class DetalhesCliente extends JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (emailField.getText().isEmpty()) {
-					emailField.setText("Não Informado");
+					emailField.setText("Não informado");
 				}
 			}
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (emailField.getText().equals("Não Informado")) {
+				if (emailField.getText().equals("Não informado")) {
 					emailField.setText("");
 				}
 			}

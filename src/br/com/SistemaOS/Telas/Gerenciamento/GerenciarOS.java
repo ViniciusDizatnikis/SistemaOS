@@ -31,6 +31,7 @@ public class GerenciarOS extends JFrame {
 
 	private Usuario usuarioLogado;
 	private List<OrdemServico> listaTodasOS;
+	private List<OrdemServico> osFiltradas = new ArrayList<>();
 
 	public GerenciarOS(Usuario user) {
 		this.usuarioLogado = user;
@@ -109,6 +110,23 @@ public class GerenciarOS extends JFrame {
 			CriarOrdemServico frame = new CriarOrdemServico(usuarioLogado);
 			frame.setVisible(true);
 		});
+		
+		campoPesquisa.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (campoPesquisa.getText().equals("Digite o equipamento ou técnico...")) {
+                    campoPesquisa.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (campoPesquisa.getText().isEmpty()) {
+                    campoPesquisa.setText("Digite o equipamento ou técnico...");
+                    carregarOS();
+                }
+            }
+        });
 
 		campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -130,6 +148,7 @@ public class GerenciarOS extends JFrame {
 		addWindowFocusListener(new WindowFocusListener() {
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
+				campoPesquisa.setText("Digite o equipamento ou técnico...");
 				carregarOS();
 			}
 
@@ -145,13 +164,13 @@ public class GerenciarOS extends JFrame {
 	}
 
 	private void atualizarTabela(List<OrdemServico> ordensServico) {
-		String[] colunas = { "ID OS", "Data", "Equipamento", "Defeito", "Técnico", "Valor", "Cliente ID" };
+		String[] colunas = { "ID OS", "Data", "Equipamento", "Defeito", "Valor", "Cliente", "Técnico" };
 		Object[][] dadosTabela = new Object[ordensServico.size()][colunas.length];
 
 		for (int i = 0; i < ordensServico.size(); i++) {
 			OrdemServico os = ordensServico.get(i);
 			dadosTabela[i] = new Object[] { os.getOs(), os.getData(), os.getEquipamento(), os.getDefeito(),
-					os.getTecnico(), os.getValor(), os.getCliente() };
+					os.getValor(), os.getCliente(), os.getTecnico() };
 		}
 
 		modeloTabela.setDataVector(dadosTabela, colunas);
@@ -163,12 +182,13 @@ public class GerenciarOS extends JFrame {
 			return;
 		}
 
-		List<OrdemServico> osFiltradas = new ArrayList<>();
 
 		for (OrdemServico os : listaTodasOS) {
 			if ((os.getEquipamento() != null && os.getEquipamento().toLowerCase().contains(textoPesquisa.toLowerCase()))
 					|| (os.getTecnico() != null
-							&& os.getTecnico().toLowerCase().contains(textoPesquisa.toLowerCase()))) {
+							&& os.getTecnico().toLowerCase().contains(textoPesquisa.toLowerCase()))
+					|| (os.getCliente() != null
+							&& os.getCliente().toLowerCase().contains(textoPesquisa.toLowerCase()))) {
 				osFiltradas.add(os);
 			}
 		}

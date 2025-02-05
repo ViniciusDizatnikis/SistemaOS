@@ -10,9 +10,18 @@ public class OrdemServico {
     private String servico;
     private BigDecimal valor;
     private String cliente;
-    private String tecnico;
+    private Integer idCliente;
+
+	private String tecnico;
     private String contato;
 
+    public Integer getIdCliente() {
+    	return idCliente;
+    }
+    
+    public void setIdCliente(Integer idCliente) {
+    	this.idCliente = idCliente;
+    }
 
     public String getContato() {
         return contato;

@@ -24,7 +24,7 @@ public class GerenciarUsuarios extends JFrame {
     private JPanel contentPane;
 
     // Pesquisa
-    private JTextField fieldSearch;
+    private JTextField campoPesquisa;
 
     // Botões
     private JButton btnCriarUsuario;
@@ -42,6 +42,8 @@ public class GerenciarUsuarios extends JFrame {
     
     // Lista de usuários
     private List<Usuario> allUsers;
+    
+    private List<Usuario> filteredUsers = new ArrayList<>();
 
     public GerenciarUsuarios(Usuario usu) {
         setResizable(false);
@@ -97,29 +99,37 @@ public class GerenciarUsuarios extends JFrame {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    Usuario selectedUser;
                     int selectedRow = table.getSelectedRow();
-                    Usuario selectedUser = allUsers.get(selectedRow);
+                    
+                    if (campoPesquisa.getText().equals("Digite o nome..") || campoPesquisa.getText().trim().isEmpty()) {
+                        selectedUser = allUsers.get(selectedRow);
+                    } else {
+                        selectedUser = filteredUsers.get(selectedRow);
+                    }
+
                     DetalhesUsuario userFrame = new DetalhesUsuario(
-                    		selectedUser.getId(), 
-                    		selectedUser.getNome(), 
-                    		selectedUser.getFone(), 
-                    		selectedUser.getLogin(), 
-                    		selectedUser.getSenha(), 
-                    		selectedUser.getPerfil(),
-                    		user);
+                            selectedUser.getId(),
+                            selectedUser.getNome(),
+                            selectedUser.getFone(),
+                            selectedUser.getLogin(),
+                            selectedUser.getSenha(),
+                            selectedUser.getPerfil(),
+                            user);
                     userFrame.setVisible(true);
                 }
             }
         });
     }
 
+
     private void initTools() {
     	
     	//Pesquisa
-        fieldSearch = new JTextField("Digite o nome..");
-        fieldSearch.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
-        fieldSearch.setBounds(731, 84, 263, 32);
-        contentPane.add(fieldSearch);
+        campoPesquisa = new JTextField("Digite o nome..");
+        campoPesquisa.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
+        campoPesquisa.setBounds(731, 84, 263, 32);
+        contentPane.add(campoPesquisa);
 
         //btnCriarUsuario
         btnCriarUsuario = new JButton("Criar Usuario");
@@ -151,42 +161,44 @@ public class GerenciarUsuarios extends JFrame {
             frame.setVisible(true);
         });
 
-        fieldSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+        campoPesquisa.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
-                if (fieldSearch.getText().equals("Digite o nome..")) {
-                    fieldSearch.setText("");
+                if (campoPesquisa.getText().equals("Digite o nome..")) {
+                    campoPesquisa.setText("");
                 }
             }
 
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
-                if (fieldSearch.getText().isEmpty()) {
-                    fieldSearch.setText("Digite o nome..");
+                if (campoPesquisa.getText().isEmpty()) {
+                    campoPesquisa.setText("Digite o nome..");
+                    loadUsers();
                 }
             }
         });
 
-        fieldSearch.getDocument().addDocumentListener(new DocumentListener() {
+        campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                filterUsers(fieldSearch.getText().trim());
+                filterUsers(campoPesquisa.getText().trim());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                filterUsers(fieldSearch.getText().trim());
+                filterUsers(campoPesquisa.getText().trim());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                filterUsers(fieldSearch.getText().trim());
+                filterUsers(campoPesquisa.getText().trim());
             }
         });
         
         addWindowFocusListener(new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
+            	campoPesquisa.setText("Digite o nome..");
             	loadUsers();
             }
 
@@ -223,13 +235,13 @@ public class GerenciarUsuarios extends JFrame {
     private void filterUsers(String searchText) {
         if (allUsers == null) return;
 
-        List<Usuario> filteredData = new ArrayList<>();
+        filteredUsers.clear(); 
         for (Usuario usuario : allUsers) {
             if (usuario.getNome().toLowerCase().contains(searchText.toLowerCase())) {
-                filteredData.add(usuario);
+                filteredUsers.add(usuario);
             }
         }
 
-        updateTable(filteredData); 
+        updateTable(filteredUsers);
     }
 }

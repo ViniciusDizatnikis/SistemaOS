@@ -2,7 +2,6 @@ package br.com.SistemaOS.Telas.Gerenciamento;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import br.com.SistemaOS.Telas.Criar.CriarCliente;
 import br.com.SistemaOS.Telas.Detalhes.DetalhesCliente;
 import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.Cliente;
-import br.com.SistemaOS.modelo.Usuario;
 
 public class GerenciarClientes extends JFrame {
 
@@ -39,13 +37,9 @@ public class GerenciarClientes extends JFrame {
 	private ScreenTools screenTools = new ScreenTools();
 	private CentroClientesDAO clienteDAO = new CentroClientesDAO();
 
-	// Usuário
-	private Usuario usuarioLogado;
-
-	private ScreenTools util = new ScreenTools();
-
-	// Lista de clientes para otimização
+	// Lista 
 	private List<Cliente> listaTodosClientes;
+	private List<Cliente> clientesFiltrados = new ArrayList<>();
 
 	public GerenciarClientes() {
 		setResizable(false);
@@ -53,7 +47,7 @@ public class GerenciarClientes extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 540);
 		setLocationRelativeTo(null);
-		setIconImage(util.getLogo());
+		setIconImage(screenTools.getLogo());
 
 		painelPrincipal = new JPanel();
 		painelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -62,8 +56,6 @@ public class GerenciarClientes extends JFrame {
 		painelPrincipal.setLayout(null);
 
 		inicializarComponentes();
-
-		// Carrega os dados na inicialização
 		carregarClientes();
 	}
 
@@ -79,54 +71,60 @@ public class GerenciarClientes extends JFrame {
 	}
 
 	private void inicializarTabela() {
-		modeloTabela = new DefaultTableModel();
-		tabelaClientes = new JTable(modeloTabela) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
+	    modeloTabela = new DefaultTableModel();
+	    tabelaClientes = new JTable(modeloTabela) {
+	        @Override
+	        public boolean isCellEditable(int row, int column) {
+	            return false;
+	        }
+	    };
 
-		JScrollPane painelRolagem = new JScrollPane(tabelaClientes);
-		painelRolagem.setBounds(10, 127, 984, 368);
-		painelPrincipal.add(painelRolagem);
+	    JScrollPane painelRolagem = new JScrollPane(tabelaClientes);
+	    painelRolagem.setBounds(10, 127, 984, 368);
+	    painelPrincipal.add(painelRolagem);
 
-		tabelaClientes.setRowHeight(25);
-		tabelaClientes.setFillsViewportHeight(true);
-		tabelaClientes.getTableHeader().setReorderingAllowed(false);
-		tabelaClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    tabelaClientes.setRowHeight(25);
+	    tabelaClientes.setFillsViewportHeight(true);
+	    tabelaClientes.getTableHeader().setReorderingAllowed(false);
+	    tabelaClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		tabelaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
-			public void mouseClicked(java.awt.event.MouseEvent e) {
-				if (e.getClickCount() == 2 && tabelaClientes.getSelectedRow() != -1) {
-					int linhaSelecionada = tabelaClientes.getSelectedRow();
-					Cliente clienteSelecionado = listaTodosClientes.get(linhaSelecionada);
-					DetalhesCliente telaDetalhes = new DetalhesCliente(clienteSelecionado.getId(),
-							clienteSelecionado.getNome(), clienteSelecionado.getFone(),
-							clienteSelecionado.getEndereco(), clienteSelecionado.getEmail());
-					telaDetalhes.setVisible(true);
-				}
-			}
-		});
+	    tabelaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+	        @Override
+	        public void mouseClicked(java.awt.event.MouseEvent e) {
+	            if (e.getClickCount() == 2 && tabelaClientes.getSelectedRow() != -1) {
+	                Cliente clienteSelecionado;
+	                int linhaSelecionada = tabelaClientes.getSelectedRow();
+	                
+	                if (campoPesquisa.getText().equals("Digite o nome do cliente...") || campoPesquisa.getText().trim().isEmpty()) {
+	                    clienteSelecionado = listaTodosClientes.get(linhaSelecionada); 
+	                } else {
+	                    clienteSelecionado = clientesFiltrados.get(linhaSelecionada); 
+	                }
+
+	                DetalhesCliente telaDetalhes = new DetalhesCliente(clienteSelecionado.getId(),
+	                        clienteSelecionado.getNome(), clienteSelecionado.getFone(),
+	                        clienteSelecionado.getEndereco(), clienteSelecionado.getEmail());
+	                telaDetalhes.setVisible(true);
+	            }
+	        }
+	    });
 	}
 
-	private void inicializarFerramentas() {
 
+	private void inicializarFerramentas() {
 		campoPesquisa = new JTextField("Digite o nome do cliente...");
-		util.estilizarField(campoPesquisa, "");
+		screenTools.estilizarField(campoPesquisa, "");
 		campoPesquisa.setBounds(731, 84, 263, 32);
 		painelPrincipal.add(campoPesquisa);
 
 		botaoCriarCliente = new JButton("Adicionar Cliente");
-		util.estilizarBotao(botaoCriarCliente);
+		screenTools.estilizarBotao(botaoCriarCliente);
 		botaoCriarCliente.setBounds(10, 93, 194, 23);
 		botaoCriarCliente.setFocusPainted(false);
 		painelPrincipal.add(botaoCriarCliente);
 	}
 
 	private void inicializarListeners() {
-
 		botaoCriarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -183,6 +181,7 @@ public class GerenciarClientes extends JFrame {
 		addWindowFocusListener(new WindowFocusListener() {
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
+				campoPesquisa.setText("Digite o nome do cliente...");
 				carregarClientes();
 			}
 
@@ -212,22 +211,22 @@ public class GerenciarClientes extends JFrame {
 	}
 
 	private void filtrarClientes(String textoPesquisa) {
-		if (listaTodosClientes.equals("Digite o nome do cliente...") || textoPesquisa.trim().isEmpty())
+		clientesFiltrados.clear(); 
+
+		if (textoPesquisa.trim().isEmpty() || textoPesquisa.equals("Digite o nome do cliente...")) {
 			carregarClientes();
-
-		List<Cliente> clientesFiltrados = new ArrayList<>();
-
-		for (Cliente cliente : listaTodosClientes) {
-			if (cliente.getNome().toLowerCase().contains(textoPesquisa.toLowerCase())
-					|| cliente.getEndereco().toLowerCase().contains(textoPesquisa.toLowerCase())
-					|| cliente.getFone().toLowerCase().contains(textoPesquisa.toLowerCase())
-					|| cliente.getEmail().toLowerCase().contains(textoPesquisa.toLowerCase())) {
-
-				clientesFiltrados.add(cliente);
+		} else {
+			for (Cliente cliente : listaTodosClientes) {
+				if (cliente.getNome().toLowerCase().contains(textoPesquisa.toLowerCase())
+						|| cliente.getEndereco().toLowerCase().contains(textoPesquisa.toLowerCase())
+						|| cliente.getFone().toLowerCase().contains(textoPesquisa.toLowerCase())
+						|| cliente.getEmail().toLowerCase().contains(textoPesquisa.toLowerCase())) {
+					clientesFiltrados.add(cliente);
+				}
 			}
-		}
 
-		atualizarTabela(clientesFiltrados);
+			atualizarTabela(clientesFiltrados);
+		}
 	}
 
 	public static void main(String[] args) {

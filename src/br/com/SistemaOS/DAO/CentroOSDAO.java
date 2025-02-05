@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.SistemaOS.modelo.Cliente;
 import br.com.SistemaOS.modelo.OrdemServico;
 import br.com.SistemaOS.modelo.Usuario;
 
@@ -50,7 +51,7 @@ public class CentroOSDAO {
 		String sql = """
 				    SELECT
 				        O.os, O.data_os, O.equipamento, O.defeito, O.servico, O.valor,
-				        C.nome AS cliente, C.fone AS contato,
+				        C.nome AS cliente, C.fone AS contato, C.idcliente,
 				        U.usuario AS tecnico
 				    FROM
 				        tbos AS O
@@ -78,6 +79,7 @@ public class CentroOSDAO {
 					ordem.setValor(rs.getBigDecimal("valor"));
 					ordem.setCliente(rs.getString("cliente"));
 					ordem.setContato(rs.getString("contato"));
+					ordem.setIdCliente(rs.getInt("idcliente"));
 
 					listaOS.add(ordem);
 				}

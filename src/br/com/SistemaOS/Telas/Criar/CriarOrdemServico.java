@@ -5,8 +5,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.JComboBox;
 
 import java.math.BigDecimal;
@@ -99,7 +102,7 @@ public class CriarOrdemServico extends JFrame {
 
 
 		// ID Usuário (somente leitura)
-		lblIdUser = util.criarLabel("Tecnico:", 550, 300, 122, 30, 20, false);
+		lblIdUser = util.criarLabel("Técnico(a):", 550, 300, 122, 30, 20, false);
 		contentPane.add(lblIdUser);
 
 		fieldIdUser = new JTextField();
@@ -141,6 +144,36 @@ public class CriarOrdemServico extends JFrame {
 			JOptionPane.showMessageDialog(this, "Ordem de Serviço criada com sucesso!");
 			this.dispose();
 		});
+		
+		fieldValor.getDocument().addDocumentListener(new DocumentListener() {
+
+		    @Override
+		    public void removeUpdate(DocumentEvent e) {
+		    }
+
+		    @Override
+		    public void insertUpdate(DocumentEvent e) {
+		        SwingUtilities.invokeLater(() -> {
+		            String text = fieldValor.getText();
+
+		            text = text.replaceAll("[^\\d]", "");
+
+		            if (text.length() > 2) {
+		                text = text.substring(0, text.length() - 2) + "." + text.substring(text.length() - 2);
+		            }
+
+		            fieldValor.setText(text);
+
+		            fieldValor.setCaretPosition(text.length());
+		        });
+		    }
+
+		    @Override
+		    public void changedUpdate(DocumentEvent e) {
+		    }
+		});
+
+
 	}
 
 	public void criarOrdemServico(String equipamento, String defeito, String servico, BigDecimal valor,
