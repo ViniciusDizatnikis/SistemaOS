@@ -88,7 +88,7 @@
 
 4. Abra sua IDE com o projeto e procure por "br.com.StartSystem/OpenSistemOS.java" e a execute, é por ela onde começa todo o sistema.
 
-   ![local De Executar](Imagens/Iniciar Systema.png)
+   ![local De Executar](Imagens/IniciarSystema.png)
 
 5. Se seu banco de dados estiver configurado corretamente aparecerá esta tela:
 
