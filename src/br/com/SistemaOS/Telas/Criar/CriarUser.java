@@ -11,6 +11,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
 import br.com.SistemaOS.Utils.ScreenTools;
 
@@ -43,6 +46,8 @@ public class CriarUser extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 1020, 540);
+        setTitle("Criar Novo Usuário");
+        setIconImage(util.getLogo());
         setLocationRelativeTo(null);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -75,6 +80,26 @@ public class CriarUser extends JFrame {
         fieldFone = new JTextField();
         util.estilizarField(fieldFone, "");
         fieldFone.setBounds(50, 240, 490, 35);
+        fieldFone.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				util.formatarCelular(fieldFone);
+				
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
         contentPane.add(fieldFone);
 
         JLabel lblLogin = util.criarLabel("Login:", 50, 300, 95, 30, 20, false);

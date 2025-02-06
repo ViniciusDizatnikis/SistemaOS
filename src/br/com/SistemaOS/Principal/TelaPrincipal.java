@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import br.com.SistemaOS.DAO.CentroOSDAO;
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
+import br.com.SistemaOS.DAO.RelatoriosDAO;
 import br.com.SistemaOS.Telas.Criar.CriarCliente;
 import br.com.SistemaOS.Telas.Detalhes.DetalhesOrdemServico;
 import br.com.SistemaOS.Telas.Gerenciamento.GerenciarClientes;
@@ -23,329 +24,345 @@ import br.com.SistemaOS.Telas.Gerenciamento.GerenciarUsuarios;
 import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.OrdemServico;
 import br.com.SistemaOS.modelo.Usuario;
+import java.awt.event.InputEvent;
 
 public class TelaPrincipal extends JFrame {
 
-    private static final long serialVersionUID = 1L;
-    private ScreenTools util = new ScreenTools();
-    private CentroUsuariosDAO userDao = new CentroUsuariosDAO();
-    private CentroOSDAO osDao = new CentroOSDAO();
-    private Usuario user;
-    private JPanel contentPane;
-    private boolean isAdmin, isAdministrador;
-    private JLabel status;
-    private static final Color SUCCESS_COLOR = new Color(46, 204, 113);
-    private static final Color ERROR_COLOR = new Color(231, 76, 60);
-    
-    private DefaultTableModel model;
+	private static final long serialVersionUID = 1L;
+	private ScreenTools util = new ScreenTools();
+	private CentroUsuariosDAO userDao = new CentroUsuariosDAO();
+	private CentroOSDAO osDao = new CentroOSDAO();
+	private Usuario user;
+	private JPanel contentPane;
+	private boolean isAdmin, isAdministrador;
+	private JLabel status;
+	private static final Color SUCCESS_COLOR = new Color(46, 204, 113);
+	private static final Color ERROR_COLOR = new Color(231, 76, 60);
 
-    public TelaPrincipal(Usuario usuInfo) {
-        this.user = usuInfo;
-        this.isAdmin = usuInfo.getPerfil().equals("admin");
-        this.isAdministrador = usuInfo.getNome().equals("Administrador");
+	private RelatoriosDAO relatorios = new RelatoriosDAO();
 
-        setUpFrame();
-        setUpMenuBar(isAdmin);
-        setUpContentPane(usuInfo);
-    }
+	private DefaultTableModel model;
 
-    private void setUpFrame() {
-        setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(TelaPrincipal.class.getResource("/br/com/SistemaOS/Icones/icon/Logo.png")));
-        setTitle("Sistema De Ordem e Serviço");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1360, 720);
-        setLocationRelativeTo(null);
-        setResizable(false);
+	public TelaPrincipal(Usuario usuInfo) {
+		this.user = usuInfo;
+		this.isAdmin = usuInfo.getPerfil().equals("admin");
+		this.isAdministrador = usuInfo.getNome().equals("Administrador");
 
-        // Atualizar a tabela quando a janela ganhar o foco
-        addWindowFocusListener(new WindowFocusListener() {
-            @Override
-            public void windowGainedFocus(WindowEvent e) {
-                carregarDados(model); 
-            }
+		setUpFrame();
+		setUpMenuBar(isAdmin);
+		setUpContentPane(usuInfo);
+	}
 
-            @Override
-            public void windowLostFocus(WindowEvent e) {
-            }
-        });
-    }
+	private void setUpFrame() {
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(TelaPrincipal.class.getResource("/br/com/SistemaOS/Icones/icon/Logo.png")));
+		setTitle("Sistema De Ordem e Serviço");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(1360, 720);
+		setLocationRelativeTo(null);
+		setResizable(false);
 
-    private void setUpMenuBar(boolean isAdmin) {
-        JMenuBar menuBar = new JMenuBar();
-        setJMenuBar(menuBar);
+		// Atualizar a tabela quando a janela ganhar o foco
+		addWindowFocusListener(new WindowFocusListener() {
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				carregarDados(model);
+			}
 
-        JMenu menuCadastro = new JMenu("Cadastro");
-        menuBar.add(menuCadastro);
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+			}
+		});
+	}
 
-        JMenuItem menuClientes = new JMenuItem(isAdmin? "Clientes": "Criar Cliente");
-        menuClientes.setAccelerator(KeyStroke.getKeyStroke("control C"));
-        menuClientes.addActionListener(e -> abrirCadastroCliente());
-        menuCadastro.add(menuClientes);
+	private void setUpMenuBar(boolean isAdmin) {
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
 
-        JMenuItem menuOS = new JMenuItem("OS");
-        menuOS.setAccelerator(KeyStroke.getKeyStroke("control O"));
-        menuOS.addActionListener(e -> abrirCadastroOS());
-        menuCadastro.add(menuOS);
+		JMenu menuCadastro = new JMenu("Cadastro");
+		menuBar.add(menuCadastro);
 
-        JMenuItem menuUsuarios = new JMenuItem("Usuários");
-        menuUsuarios.setAccelerator(KeyStroke.getKeyStroke("control U"));
-        menuUsuarios.addActionListener(e -> abrirCadastroUsuarios());
-        menuUsuarios.setEnabled(isAdmin);
-        menuCadastro.add(menuUsuarios);
+		JMenuItem menuClientes = new JMenuItem(isAdmin ? "Clientes" : "Criar Cliente");
+		menuClientes.setAccelerator(KeyStroke.getKeyStroke("control C"));
+		menuClientes.addActionListener(e -> abrirCadastroCliente());
+		menuCadastro.add(menuClientes);
 
-        JMenu menuRelatorios = new JMenu("Relatórios");
-        menuRelatorios.setEnabled(isAdmin);
-        menuBar.add(menuRelatorios);
+		JMenuItem menuOS = new JMenuItem("OS");
+		menuOS.setAccelerator(KeyStroke.getKeyStroke("control O"));
+		menuOS.addActionListener(e -> abrirCadastroOS());
+		menuCadastro.add(menuOS);
 
-        JMenuItem servicosItem = new JMenuItem("Serviços");
-        servicosItem.setAccelerator(KeyStroke.getKeyStroke("control R"));
-        servicosItem.addActionListener(e -> gerarRelatorioServicos());
-        menuRelatorios.add(servicosItem);
+		JMenuItem menuUsuarios = new JMenuItem("Usuários");
+		menuUsuarios.setAccelerator(KeyStroke.getKeyStroke("control U"));
+		menuUsuarios.addActionListener(e -> abrirCadastroUsuarios());
+		menuUsuarios.setEnabled(isAdmin);
+		menuCadastro.add(menuUsuarios);
 
-        JMenu menuAjuda = new JMenu("Ajuda");
-        menuBar.add(menuAjuda);
+		JMenu menuRelatorios = new JMenu("Relatórios");
+		menuRelatorios.setEnabled(isAdmin);
+		menuBar.add(menuRelatorios);
 
-        JMenuItem sobreItem = new JMenuItem("Sobre");
-        sobreItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
-        sobreItem.addActionListener(e -> exibirSobre());
-        menuAjuda.add(sobreItem);
+		JMenuItem servicosItem = new JMenuItem("Serviços");
+		servicosItem.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		servicosItem.addActionListener(e -> gerarRelatorioServicos());
+		menuRelatorios.add(servicosItem);
 
-        JMenu menuOpcoes = new JMenu("Opções");
-        menuBar.add(menuOpcoes);
+		JMenuItem clientesItem = new JMenuItem("Clientes");
+		clientesItem.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		clientesItem.addActionListener(e -> gerarRelatorioClientes());
+		menuRelatorios.add(clientesItem);
 
-        JMenuItem logoffItem = new JMenuItem("Logoff");
-        logoffItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, ActionEvent.ALT_MASK));
-        logoffItem.addActionListener(e -> logOffAction());
-        menuOpcoes.add(logoffItem);
+		JMenuItem usuariosItem = new JMenuItem("Usuarios");
+		usuariosItem.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		menuRelatorios.add(usuariosItem);
+		usuariosItem.addActionListener(e-> gerarRelatoriosUsuarios());
 
-        JMenuItem sairItem = new JMenuItem("Sair");
-        sairItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-        sairItem.addActionListener(e -> sairAction());
-        menuOpcoes.add(sairItem);
-    }
+		JMenu menuAjuda = new JMenu("Ajuda");
+		menuBar.add(menuAjuda);
 
-    private void abrirCadastroCliente() {
-    	if(isAdmin) {
-    		new GerenciarClientes().setVisible(true);
-    	}else {
-    		new CriarCliente().setVisible(true);
-    	}
-    }
+		JMenuItem sobreItem = new JMenuItem("Sobre");
+		sobreItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+		sobreItem.addActionListener(e -> exibirSobre());
+		menuAjuda.add(sobreItem);
 
-    private void abrirCadastroOS() {
-        new GerenciarOS(user).setVisible(true);
-    }
+		JMenu menuOpcoes = new JMenu("Opções");
+		menuBar.add(menuOpcoes);
 
-    private void abrirCadastroUsuarios() {
-        new GerenciarUsuarios(user).setVisible(true);
-    }
+		JMenuItem logoffItem = new JMenuItem("Logoff");
+		logoffItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, ActionEvent.ALT_MASK));
+		logoffItem.addActionListener(e -> logOffAction());
+		menuOpcoes.add(logoffItem);
 
-    private void gerarRelatorioServicos() {
-        JOptionPane.showMessageDialog(this, "Gerando relatório de serviços.", "Relatórios",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
+		JMenuItem sairItem = new JMenuItem("Sair");
+		sairItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
+		sairItem.addActionListener(e -> sairAction());
+		menuOpcoes.add(sairItem);
+	}
 
-    private void exibirSobre() {
-        JOptionPane.showMessageDialog(this,
-                "Sistema de Ordem e Serviço - Versão 5.0 \nDesenvolvido Por: ViniciusDizatnikis", "Sobre",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
+	private void abrirCadastroCliente() {
+		if (isAdmin) {
+			new GerenciarClientes().setVisible(true);
+		} else {
+			new CriarCliente().setVisible(true);
+		}
+	}
 
-    private void logOffAction() {
-        int confirmacao = JOptionPane.showConfirmDialog(this, "Deseja fazer logoff?", "Confirmação",
-                JOptionPane.YES_NO_OPTION);
-        if (confirmacao == JOptionPane.YES_OPTION) {
-            new TelaLogin().setVisible(true);
-            this.dispose();
-        }
-    }
+	private void abrirCadastroOS() {
+		new GerenciarOS(user).setVisible(true);
+	}
 
-    private void sairAction() {
-        int confirmacao = JOptionPane.showConfirmDialog(this, "Tem certeza de que deseja sair do sistema?", "Sair",
-                JOptionPane.YES_NO_OPTION);
-        if (confirmacao == JOptionPane.YES_OPTION) {
-            System.exit(0);
-        }
-    }
+	private void abrirCadastroUsuarios() {
+		new GerenciarUsuarios(user).setVisible(true);
+	}
+	
+	private void gerarRelatoriosUsuarios() {
+		relatorios.getRelatorioUsuarios();
+	}
 
-    private void setUpContentPane(Usuario usuInfo) {
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setBackground(util.getBackgroundColor());
-        contentPane.setLayout(null);
-        setContentPane(contentPane);
+	private void gerarRelatorioServicos() {
+		relatorios.getRelatorioServicos();
+	}
 
-        setUpTable();
-        setUpUserIcon(contentPane);
-        setUpUserDetails(contentPane);
-        setUpDateAndTimePanel();
-        
-        String TextPainel = isAdmin? "Ordens E Serviço da Empresa": "Suas Ordens E serviços";
+	private void gerarRelatorioClientes() {
+		relatorios.getRelatorioClientes();
+	}
 
-        JLabel lblTexto = new JLabel(TextPainel);
-        lblTexto.setForeground(Color.WHITE);
-        lblTexto.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 61));
-        lblTexto.setHorizontalAlignment(SwingConstants.LEFT);
-        lblTexto.setBounds(10, 0, 927, 82);
-        contentPane.add(lblTexto);
+	private void exibirSobre() {
+		JOptionPane.showMessageDialog(this,
+				"Sistema de Ordem e Serviço - Versão 5.0 \nDesenvolvido Por: ViniciusDizatnikis", "Sobre",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
 
-        status = new JLabel("<dynamic>");
-        status.setHorizontalAlignment(SwingConstants.CENTER);
-        status.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        status.setForeground(Color.WHITE);
-        status.setBounds(947, 623, 387, 25);
-        contentPane.add(status);
-    }
+	private void logOffAction() {
+		int confirmacao = JOptionPane.showConfirmDialog(this, "Deseja fazer logoff?", "Confirmação",
+				JOptionPane.YES_NO_OPTION);
+		if (confirmacao == JOptionPane.YES_OPTION) {
+			new TelaLogin().setVisible(true);
+			this.dispose();
+		}
+	}
 
-    private void atualizarStatus() {
-        boolean conectado = userDao.getStatus();
-        String mensagem = conectado ? "Status: Conectado ao banco de dados"
-                : "Status: Erro ao conectar ao banco de dados";
-        Color cor = conectado ? SUCCESS_COLOR : ERROR_COLOR;
+	private void sairAction() {
+		int confirmacao = JOptionPane.showConfirmDialog(this, "Tem certeza de que deseja sair do sistema?", "Sair",
+				JOptionPane.YES_NO_OPTION);
+		if (confirmacao == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
+	}
 
-        status.setText(mensagem);
-        status.setForeground(cor);
-    }
+	private void setUpContentPane(Usuario usuInfo) {
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(util.getBackgroundColor());
+		contentPane.setLayout(null);
+		setContentPane(contentPane);
 
-    private void setUpTable() {
-        String[] columnNames = new String[] { "ID Venda", "Data", "Equipamento", "Defeito", "Serviço", "Valor",
-                "Cliente", "Técnico(a)" };
+		setUpTable();
+		setUpUserIcon(contentPane);
+		setUpUserDetails(contentPane);
+		setUpDateAndTimePanel();
 
-        model = new DefaultTableModel(columnNames, 0);
-        carregarDados(model);
+		String TextPainel = isAdmin ? "Ordens e Serviço da Empresa" : "Suas Ordens e Serviços";
 
-        JTable table = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(table);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setRowHeight(25);
-        contentPane.add(scrollPane);
-        scrollPane.setBounds(10, 92, 927, 555);
+		JLabel lblTexto = new JLabel(TextPainel);
+		lblTexto.setForeground(Color.WHITE);
+		lblTexto.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 61));
+		lblTexto.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTexto.setBounds(10, 0, 927, 82);
+		contentPane.add(lblTexto);
 
-        JPopupMenu popupMenu = new JPopupMenu();
-        setUpTablePopupMenu(table, popupMenu);
+		status = new JLabel("<dynamic>");
+		status.setHorizontalAlignment(SwingConstants.CENTER);
+		status.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		status.setForeground(Color.WHITE);
+		status.setBounds(947, 623, 387, 25);
+		contentPane.add(status);
+	}
 
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    inspectItem(table);
-                }
-            }
-        });
-    }
+	private void atualizarStatus() {
+		boolean conectado = userDao.getStatus();
+		String mensagem = conectado ? "Status: Conectado ao banco de dados"
+				: "Status: Erro ao conectar ao banco de dados";
+		Color cor = conectado ? SUCCESS_COLOR : ERROR_COLOR;
 
-    private void carregarDados(DefaultTableModel model) {
-        // Limpa os dados antigos antes de carregar os novos
-        model.setRowCount(0);
+		status.setText(mensagem);
+		status.setForeground(cor);
+	}
 
-        List<OrdemServico> data = isAdministrador? osDao.listarTodasOs() :osDao.listarOsComId(user.getId());
+	private void setUpTable() {
+		String[] columnNames = new String[] { "ID Venda", "Data", "Equipamento", "Defeito", "Serviço", "Valor",
+				"Cliente", "Técnico(a)" };
 
-        for (OrdemServico os : data) {
-            model.addRow(new Object[] {
-                os.getOs(), 
-                os.getData(), 
-                os.getEquipamento(), 
-                os.getDefeito(), 
-                os.getServico(),
-                os.getValor(),
-                os.getCliente(),
-                os.getTecnico()
-            });
-        }
-    }
+		model = new DefaultTableModel(columnNames, 0);
+		carregarDados(model);
 
-    private void setUpTablePopupMenu(JTable table, JPopupMenu popupMenu) {
-        JMenuItem inspecionarItem = new JMenuItem("Inspecionar");
-        inspecionarItem.addActionListener(e -> inspectItem(table));
-        popupMenu.add(inspecionarItem);
-    }
+		JTable table = new JTable(model);
+		JScrollPane scrollPane = new JScrollPane(table);
+		table.setDefaultEditor(Object.class, null);
+		table.getTableHeader().setReorderingAllowed(false);
+		table.setRowHeight(25);
+		contentPane.add(scrollPane);
+		scrollPane.setBounds(10, 92, 927, 555);
 
-    private void inspectItem(JTable table) {
-        int rowIndex = table.getSelectedRow();
-        if (rowIndex != -1) {
-            OrdemServico os;
-            if (isAdministrador) {
-                os = (OrdemServico) osDao.listarTodasOs().get(rowIndex);
-            } else {
-                os = osDao.listarOsComId(user.getId()).get(rowIndex);
-            }
-            DetalhesOrdemServico info = new DetalhesOrdemServico(false);
-            info.exibirDetalhes(os);
-            info.setVisible(true);
-        }
-    }
+		JPopupMenu popupMenu = new JPopupMenu();
+		setUpTablePopupMenu(table, popupMenu);
 
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
+					inspectItem(table);
+				}
+			}
+		});
 
-    private void setUpUserIcon(JPanel contentPane) {
-        JLabel usuarioIcon = new JLabel();
-        usuarioIcon.setHorizontalAlignment(SwingConstants.CENTER);
-        usuarioIcon.setBounds(1010, 247, 267, 264);
-        usuarioIcon.setIcon(util.mudarTamanhoImg("/br/com/SistemaOS/Icones/icon/homem-usuario.png", 260, 260));
-        contentPane.add(usuarioIcon);
-    }
+	}
 
-    private void setUpUserDetails(JPanel contentPane) {
-        String splitName = user.getNome();
-        if (user.getNome().contains(" ")) {
-            splitName = splitName.split(" ")[0];
-        }
-        JLabel lblUsuario = new JLabel(splitName);
-        lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
-        lblUsuario.setForeground(Color.WHITE);
-        lblUsuario.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 25));
-        lblUsuario.setBounds(947, 161, 387, 34);
-        contentPane.add(lblUsuario);
-    }
+	private void carregarDados(DefaultTableModel model) {
+		// Limpa os dados antigos antes de carregar os novos
+		model.setRowCount(0);
 
-    private void setUpDateAndTimePanel() {
-        JPanel desktopPanel_1 = new JPanel();
-        desktopPanel_1.setBackground(Color.GRAY);
-        desktopPanel_1.setBounds(947, 550, 387, 71);
-        contentPane.add(desktopPanel_1);
-        desktopPanel_1.setLayout(null);
+		List<OrdemServico> data = isAdministrador ? osDao.listarTodasOs() : osDao.listarOsComId(user.getId());
 
-        JLabel lblText = new JLabel("Data:");
-        lblText.setBounds(5, 5, 189, 26);
-        lblText.setHorizontalAlignment(SwingConstants.CENTER);
-        lblText.setForeground(Color.WHITE);
-        lblText.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 24));
-        desktopPanel_1.add(lblText);
+		for (OrdemServico os : data) {
+			model.addRow(new Object[] { os.getOs(), os.getData(), os.getEquipamento(), os.getDefeito(), os.getServico(),
+					os.getValor(), os.getCliente(), os.getTecnico() });
+		}
+	}
 
-        JLabel lblHora = new JLabel("Hora:");
-        lblHora.setHorizontalAlignment(SwingConstants.CENTER);
-        lblHora.setForeground(Color.WHITE);
-        lblHora.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 24));
-        lblHora.setBounds(193, 5, 184, 26);
-        desktopPanel_1.add(lblHora);
+	private void setUpTablePopupMenu(JTable table, JPopupMenu popupMenu) {
+		JMenuItem inspecionarItem = new JMenuItem("Inspecionar");
+		inspecionarItem.addActionListener(e -> inspectItem(table));
+		popupMenu.add(inspecionarItem);
+	}
 
-        JLabel dataSource = new JLabel("<Dynamic>");
-        dataSource.setHorizontalAlignment(SwingConstants.CENTER);
-        dataSource.setForeground(Color.WHITE);
-        dataSource.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 20));
-        dataSource.setBounds(5, 34, 189, 26);
-        desktopPanel_1.add(dataSource);
+	private void inspectItem(JTable table) {
+		int rowIndex = table.getSelectedRow();
+		if (rowIndex != -1) {
+			OrdemServico os;
+			if (isAdministrador) {
+				os = (OrdemServico) osDao.listarTodasOs().get(rowIndex);
+			} else {
+				os = osDao.listarOsComId(user.getId()).get(rowIndex);
+			}
+			DetalhesOrdemServico info = new DetalhesOrdemServico(false);
+			info.exibirDetalhes(os);
+			info.setVisible(true);
+		}
+	}
 
-        JLabel horaSource = new JLabel("<Dynamic>");
-        horaSource.setHorizontalAlignment(SwingConstants.CENTER);
-        horaSource.setForeground(Color.WHITE);
-        horaSource.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 20));
-        horaSource.setBounds(193, 34, 189, 26);
-        desktopPanel_1.add(horaSource);
+	private void setUpUserIcon(JPanel contentPane) {
+		JLabel usuarioIcon = new JLabel();
+		usuarioIcon.setHorizontalAlignment(SwingConstants.CENTER);
+		usuarioIcon.setBounds(1010, 247, 267, 264);
+		usuarioIcon.setIcon(util.mudarTamanhoImg("/br/com/SistemaOS/Icones/icon/homem-usuario.png", 260, 260));
+		contentPane.add(usuarioIcon);
+	}
 
-        JLabel lblSaudacao = new JLabel("<dynamic>");
-        lblSaudacao.setHorizontalAlignment(SwingConstants.CENTER);
-        lblSaudacao.setForeground(Color.WHITE);
-        lblSaudacao.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 32));
-        lblSaudacao.setBounds(947, 99, 387, 51);
-        contentPane.add(lblSaudacao);
+	private void setUpUserDetails(JPanel contentPane) {
+		String splitName = user.getNome();
+		if (user.getNome().contains(" ")) {
+			splitName = splitName.split(" ")[0];
+		}
+		JLabel lblUsuario = new JLabel(splitName);
+		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsuario.setForeground(Color.WHITE);
+		lblUsuario.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 25));
+		lblUsuario.setBounds(947, 161, 387, 34);
+		contentPane.add(lblUsuario);
+	}
 
-        Timer timerClock = new Timer(1000, e -> {
-            lblSaudacao.setText(util.getSaudacao());
-            dataSource.setText(util.getDataAtual());
-            horaSource.setText(util.getHoraAtual());
-            atualizarStatus();
-        });
-        timerClock.start();
-    }
+	private void setUpDateAndTimePanel() {
+		JPanel desktopPanel_1 = new JPanel();
+		desktopPanel_1.setBackground(Color.GRAY);
+		desktopPanel_1.setBounds(947, 550, 387, 71);
+		contentPane.add(desktopPanel_1);
+		desktopPanel_1.setLayout(null);
+
+		JLabel lblText = new JLabel("Data:");
+		lblText.setBounds(5, 5, 189, 26);
+		lblText.setHorizontalAlignment(SwingConstants.CENTER);
+		lblText.setForeground(Color.WHITE);
+		lblText.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 24));
+		desktopPanel_1.add(lblText);
+
+		JLabel lblHora = new JLabel("Hora:");
+		lblHora.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHora.setForeground(Color.WHITE);
+		lblHora.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 24));
+		lblHora.setBounds(193, 5, 184, 26);
+		desktopPanel_1.add(lblHora);
+
+		JLabel dataSource = new JLabel("<Dynamic>");
+		dataSource.setHorizontalAlignment(SwingConstants.CENTER);
+		dataSource.setForeground(Color.WHITE);
+		dataSource.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 20));
+		dataSource.setBounds(5, 34, 189, 26);
+		desktopPanel_1.add(dataSource);
+
+		JLabel horaSource = new JLabel("<Dynamic>");
+		horaSource.setHorizontalAlignment(SwingConstants.CENTER);
+		horaSource.setForeground(Color.WHITE);
+		horaSource.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 20));
+		horaSource.setBounds(193, 34, 189, 26);
+		desktopPanel_1.add(horaSource);
+
+		JLabel lblSaudacao = new JLabel("<dynamic>");
+		lblSaudacao.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSaudacao.setForeground(Color.WHITE);
+		lblSaudacao.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 32));
+		lblSaudacao.setBounds(947, 99, 387, 51);
+		contentPane.add(lblSaudacao);
+
+		Timer timerClock = new Timer(1000, e -> {
+			lblSaudacao.setText(util.getSaudacao());
+			dataSource.setText(util.getDataAtual());
+			horaSource.setText(util.getHoraAtual());
+			atualizarStatus();
+		});
+		timerClock.start();
+	}
 }

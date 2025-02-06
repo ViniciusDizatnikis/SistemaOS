@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
 import br.com.SistemaOS.Utils.ScreenTools;
@@ -58,6 +60,7 @@ public class DetalhesUsuario extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 540);
 		setLocationRelativeTo(null);
+		setTitle("Informações do Usuário");
 		setResizable(false);
 		setIconImage(util.getLogo());
 
@@ -172,6 +175,27 @@ public class DetalhesUsuario extends JFrame {
 		txtFone = new JTextField(foneUser);
 		txtFone.setEnabled(false);
 		txtFone.setBounds(148, 334, 300, 30);
+		txtFone.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				util.formatarCelular(txtFone);
+				
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		contentPane.add(txtFone);
 
 		cbPerfil = new JComboBox<>(new String[] { "Admin", "User" });

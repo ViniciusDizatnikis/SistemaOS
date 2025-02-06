@@ -62,6 +62,7 @@ public class DetalhesCliente extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 540);
 		setLocationRelativeTo(null);
+		setTitle("Informações do Cliente");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setResizable(false);
 		contentPane = new JPanel();

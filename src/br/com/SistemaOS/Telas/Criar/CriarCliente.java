@@ -43,6 +43,8 @@ public class CriarCliente extends JFrame {
 
 	private void configurarFrame() {
 		setResizable(false);
+		setTitle("Criar Cliente");
+		setIconImage(util.getLogo());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 540);
 		setLocationRelativeTo(null);

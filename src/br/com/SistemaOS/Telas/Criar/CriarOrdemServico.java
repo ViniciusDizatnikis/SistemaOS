@@ -39,6 +39,8 @@ public class CriarOrdemServico extends JFrame {
 
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setTitle("Criar Ordem E Serviço");
+		setIconImage(getIconImage());
 		setBounds(100, 100, 1020, 540);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
