@@ -19,7 +19,6 @@
 - **Geração de Relatórios**: Agora é possível gerar relatórios detalhados de clientes, serviços e usuários, facilitando o controle e a gestão.  
 - **Formatação de Números e Preços**: Os valores financeiros e numéricos são formatados corretamente para melhor visualização.  
 - **Tela Principal Ajustada**: A interface da tela principal foi melhorada para proporcionar uma navegação mais intuitiva e eficiente.  
-- **Futuras Funcionalidades**: O sistema continuará evoluindo, trazendo melhorias na gestão de ordens de serviço e outras otimizações.  
 
  ## Status do Projeto
 
@@ -87,9 +86,9 @@
    ![Conexão SQL](Imagens/configSQL.png)  
 
 
-4. Abra sua IDE com o projeto e procure por "TelaLogin.java" e a execute, é por ela onde começa todo o sistema.
+4. Abra sua IDE com o projeto e procure por "br.com.StartSystem/OpenSistemOS.java" e a execute, é por ela onde começa todo o sistema.
 
-![local De Executar](Imagens/local.png)
+![local De Executar](Imagens/Iniciar Systema.png)
 
 5. Se seu banco de dados estiver configurado corretamente aparecerá esta tela:
 
@@ -102,4 +101,8 @@ use essas credenciais para logar:
 6. Ele abrirá a tela principal do sitema. 
 ![Tela Principal](Imagens/telaPrincipal.png)  
 
-Este projeto ainda está em fase de desenvolvimento e pode conter alguns bugs. Se encontrar algum problema, sinta-se à vontade para abrir uma issue no repositório do GitHub.
+## Javadoc
+
+O projeto conta com documentação Javadoc detalhada, disponível em "Info/javadoc", que descreve todas as classes e métodos implementados, facilitando a compreensão e manutenção do código.
+
+Este projeto ainda está Finalizado. Se encontrar algum problema, sinta-se à vontade para abrir uma issue no repositório do GitHub.
