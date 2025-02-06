@@ -25,37 +25,83 @@ import br.com.SistemaOS.modelo.Usuario;
 
 import javax.swing.JPasswordField;
 
+/**
+ * Classe DetalhesUsuario Representa uma janela de detalhes de um usuário,
+ * permitindo visualizar e editar informações como nome, telefone, login, senha
+ * e perfil.
+ */
 public class DetalhesUsuario extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+
 	// Outras classes
+	/** DAO para operações relacionadas aos usuários. */
 	private CentroUsuariosDAO dao = new CentroUsuariosDAO();
+	/** Utilitário para manipulação de elementos da interface gráfica. */
 	private ScreenTools util = new ScreenTools();
 
-	// Inforção do Usuario
+	// Informação do Usuario
+	/** ID do usuário. */
 	private Integer idUser;
+	/** Nome do usuário. */
 	private String nomeUser;
+	/** Telefone do usuário. */
 	private String foneUser;
+	/** Login do usuário. */
 	private String loginUser;
+	/** Senha do usuário. */
 	private String senhaUser;
+	/** Perfil do usuário (Admin ou User). */
 	private String perfilUser;
+	/** Objeto do tipo Usuario que representa o usuário atual. */
 	private Usuario user;
 
 	// Botões e fields
+	/** Label que exibe o nome do usuário no cartão. */
 	private JLabel nomeUsuarioCard;
-	private JButton btnEditar, btnCancelar, btnSalvar, btnOk, btnDeletar;
-	private JTextField txtNome, txtFone, txtLogin;
+	/** Botão para editar as informações do usuário. */
+	private JButton btnEditar;
+	/** Botão para cancelar a edição das informações do usuário. */
+	private JButton btnCancelar;
+	/** Botão para salvar as alterações feitas nas informações do usuário. */
+	private JButton btnSalvar;
+	/** Botão para fechar a janela de detalhes do usuário. */
+	private JButton btnOk;
+	/** Botão para excluir o usuário. */
+	private JButton btnDeletar;
+	/** Campo de texto para o nome do usuário. */
+	private JTextField txtNome;
+	/** Campo de texto para o telefone do usuário. */
+	private JTextField txtFone;
+	/** Campo de texto para o login do usuário. */
+	private JTextField txtLogin;
+	/** Campo de senha para a senha do usuário. */
 	private JPasswordField pwSenha;
+	/** ComboBox para selecionar o perfil do usuário (Admin ou User). */
 	private JComboBox<String> cbPerfil;
 
+	/** Painel principal da interface. */
 	private JPanel contentPane;
 
+	/**
+	 * Construtor da classe DetalhesUsuario.
+	 * 
+	 * @param id     ID do usuário.
+	 * @param nome   Nome do usuário.
+	 * @param fone   Telefone do usuário.
+	 * @param login  Login do usuário.
+	 * @param senha  Senha do usuário.
+	 * @param perfil Perfil do usuário.
+	 * @param usu    Objeto do tipo {@link Usuario}.
+	 */
 	public DetalhesUsuario(int id, String nome, String fone, String login, String senha, String perfil, Usuario usu) {
 		setUpFrame();
-
 		initComponents(id, nome, fone, login, senha, perfil, usu);
 	}
 
+	/**
+	 * Configura as propriedades básicas da janela.
+	 */
 	private void setUpFrame() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 540);
@@ -72,28 +118,31 @@ public class DetalhesUsuario extends JFrame {
 		setContentPane(contentPane);
 	}
 
+	/**
+	 * Inicializa os componentes da interface.
+	 * 
+	 * @param id     ID do usuário.
+	 * @param nome   Nome do usuário.
+	 * @param fone   Telefone do usuário.
+	 * @param login  Login do usuário.
+	 * @param senha  Senha do usuário.
+	 * @param perfil Perfil do usuário.
+	 * @param usu    Objeto do tipo {@link Usuario}.
+	 */
 	private void initComponents(Integer id, String nome, String fone, String login, String senha, String perfil,
 			Usuario usu) {
-
 		getUserData(id, nome, fone, login, senha, perfil, usu);
-
 		initLabels();
-
 		initFields();
-
 		initBtns();
 
 		btnDeletar.addActionListener(e -> deletarUsuario());
-
 		btnOk.addActionListener(e -> this.dispose());
-
 		btnSalvar.addActionListener(e -> salvarUsuario());
-
 		btnEditar.addActionListener(e -> modoEdicao(true));
-
 		btnCancelar.addActionListener(e -> modoEdicao(false));
 
-		// configuração da janela
+		// Configuração da janela
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -104,9 +153,19 @@ public class DetalhesUsuario extends JFrame {
 				}
 			}
 		});
-
 	}
 
+	/**
+	 * Obtém os dados do usuário.
+	 * 
+	 * @param id     ID do usuário.
+	 * @param nome   Nome do usuário.
+	 * @param fone   Telefone do usuário.
+	 * @param login  Login do usuário.
+	 * @param senha  Senha do usuário.
+	 * @param perfil Perfil do usuário.
+	 * @param usu    Objeto do tipo {@link Usuario}.
+	 */
 	private void getUserData(Integer id, String nome, String fone, String login, String senha, String perfil,
 			Usuario usu) {
 		this.user = usu;
@@ -118,6 +177,9 @@ public class DetalhesUsuario extends JFrame {
 		this.perfilUser = perfil;
 	}
 
+	/**
+	 * Inicializa os botões da interface.
+	 */
 	private void initBtns() {
 		btnDeletar = new JButton("Excluir");
 		btnDeletar.setBounds(354, 234, 100, 30);
@@ -144,6 +206,9 @@ public class DetalhesUsuario extends JFrame {
 		contentPane.add(btnSalvar);
 	}
 
+	/**
+	 * Inicializa as labels da interface.
+	 */
 	private void initLabels() {
 		contentPane.add(util.criarLabel("Informações do Usuário", (this.getWidth() - 400) / 2, 0, 400, 52, 35, true));
 		contentPane.add(util.criarLabel("Nome:", 48, 284, 100, 30, 20, false));
@@ -166,6 +231,9 @@ public class DetalhesUsuario extends JFrame {
 		contentPane.add(fotoUser);
 	}
 
+	/**
+	 * Inicializa os campos de entrada de dados.
+	 */
 	private void initFields() {
 		txtNome = new JTextField(nomeUser);
 		txtNome.setEnabled(false);
@@ -176,26 +244,22 @@ public class DetalhesUsuario extends JFrame {
 		txtFone.setEnabled(false);
 		txtFone.setBounds(148, 334, 300, 30);
 		txtFone.getDocument().addDocumentListener(new DocumentListener() {
-			
+
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
-			
+
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				util.formatarCelular(txtFone);
-				
 			}
-			
+
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 		});
-		
 		contentPane.add(txtFone);
 
 		cbPerfil = new JComboBox<>(new String[] { "Admin", "User" });
@@ -214,9 +278,14 @@ public class DetalhesUsuario extends JFrame {
 		pwSenha.setEnabled(false);
 		pwSenha.setText(senhaUser);
 		contentPane.add(pwSenha);
-
 	}
 
+	/**
+	 * Habilita ou desabilita o modo de edição da interface.
+	 * 
+	 * @param value {@code true} para habilitar o modo de edição, {@code false} para
+	 *              desabilitar.
+	 */
 	private void modoEdicao(boolean value) {
 		if (value) {
 			if (nomeUser.equalsIgnoreCase("administrador")) {
@@ -270,6 +339,9 @@ public class DetalhesUsuario extends JFrame {
 		}
 	}
 
+	/**
+	 * Exclui o usuário do sistema.
+	 */
 	private void deletarUsuario() {
 		if (idUser.equals(1)) {
 			JOptionPane.showMessageDialog(null, "Você não pode deletar este Usuário Por questão de segurança!", "Aviso",
@@ -288,6 +360,9 @@ public class DetalhesUsuario extends JFrame {
 		}
 	}
 
+	/**
+	 * Salva as alterações feitas no usuário.
+	 */
 	private void salvarUsuario() {
 		StringBuilder camposVazios = new StringBuilder();
 		ArrayList<Object> update = new ArrayList<>();
@@ -403,17 +478,13 @@ public class DetalhesUsuario extends JFrame {
 		}
 	}
 
+	/**
+	 * Formata o perfil do usuário.
+	 * 
+	 * @param perfil Perfil do usuário.
+	 * @return Perfil formatado.
+	 */
 	private String formatarPerfil(String perfil) {
-		if (perfil == null || perfil.isEmpty()) {
-			return perfil;
-		}
-
-		// Verifica se a primeira letra é maiúscula
-		char primeiraLetra = perfil.charAt(0);
-		if (!Character.isUpperCase(primeiraLetra)) {
-			perfil = Character.toUpperCase(primeiraLetra) + perfil.substring(1);
-		}
-		return perfil;
+		return perfil.equals("user") ? "User" : "Admin";
 	}
-
 }

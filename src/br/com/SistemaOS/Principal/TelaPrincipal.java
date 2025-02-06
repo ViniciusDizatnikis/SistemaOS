@@ -13,6 +13,8 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import br.com.SistemaOS.DAO.CentroClientesDAO;
 import br.com.SistemaOS.DAO.CentroOSDAO;
 import br.com.SistemaOS.DAO.CentroUsuariosDAO;
 import br.com.SistemaOS.DAO.RelatoriosDAO;
@@ -26,43 +28,115 @@ import br.com.SistemaOS.modelo.OrdemServico;
 import br.com.SistemaOS.modelo.Usuario;
 import java.awt.event.InputEvent;
 
+/**
+ * Classe principal da interface gráfica do sistema, responsável por gerenciar
+ * as interações do usuário com o sistema de Ordens de Serviço. Exibe a tela
+ * principal com dados do usuário, informações de status, ordens de serviço,
+ * entre outros.
+ * 
+ * @author Vinicius Dizatnikis
+ * @version 1.1
+ */
+/**
+ * Classe principal responsável por exibir a interface do sistema de Ordem e
+ * Serviço.
+ */
 public class TelaPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private ScreenTools util = new ScreenTools();
-	private CentroUsuariosDAO userDao = new CentroUsuariosDAO();
-	private CentroOSDAO osDao = new CentroOSDAO();
-	private Usuario user;
+
+	/**
+	 * Painel principal da janela.
+	 */
 	private JPanel contentPane;
-	private boolean isAdmin, isAdministrador;
+
+	// Informações do Usuário
+
+	/**
+	 * Usuário logado no sistema.
+	 */
+	private Usuario user;
+
+	/**
+	 * Indica se o usuário é um administrador.
+	 */
+	private boolean isAdmin;
+
+	/**
+	 * Indica se o usuário possui privilégios de administrador.
+	 */
+	private boolean isAdministrador;
+
+	/**
+	 * Rótulo para exibir o status.
+	 */
 	private JLabel status;
-	private static final Color SUCCESS_COLOR = new Color(46, 204, 113);
-	private static final Color ERROR_COLOR = new Color(231, 76, 60);
 
-	private RelatoriosDAO relatorios = new RelatoriosDAO();
+	// Tabela
 
+	/**
+	 * Modelo da tabela para exibição de dados.
+	 */
 	private DefaultTableModel model;
 
+	// Dependências
+
+	/**
+	 * DAO para geração de relatórios.
+	 */
+	private RelatoriosDAO relatorios = new RelatoriosDAO();
+
+	/**
+	 * DAO para ações relacionadas aos usuários.
+	 */
+	private CentroUsuariosDAO userDao = new CentroUsuariosDAO();
+
+	/**
+	 * DAO para ações relacionadas às ordens de serviço.
+	 */
+	private CentroOSDAO osDao = new CentroOSDAO();
+
+	/**
+	 * Ferramentas utilitárias reutilizáveis.
+	 */
+	private ScreenTools util = new ScreenTools();
+
+	/**
+	 * DAO para ações relacionadas aos clientes.
+	 */
+	private CentroClientesDAO cliDAO = new CentroClientesDAO();
+
+	/**
+	 * Construtor da classe TelaPrincipal.
+	 * 
+	 * @param usuInfo Informações do usuário que está logado no sistema.
+	 */
 	public TelaPrincipal(Usuario usuInfo) {
+		// Coletar Informações do Usuário
 		this.user = usuInfo;
 		this.isAdmin = usuInfo.getPerfil().equals("admin");
 		this.isAdministrador = usuInfo.getNome().equals("Administrador");
 
 		setUpFrame();
-		setUpMenuBar(isAdmin);
-		setUpContentPane(usuInfo);
+
+		setUpMenuBar();
+
+		setUpContentPane();
 	}
 
+	/**
+	 * Configura o frame principal da aplicação.
+	 */
 	private void setUpFrame() {
 		setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(TelaPrincipal.class.getResource("/br/com/SistemaOS/Icones/icon/Logo.png")));
+
 		setTitle("Sistema De Ordem e Serviço");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1360, 720);
 		setLocationRelativeTo(null);
 		setResizable(false);
 
-		// Atualizar a tabela quando a janela ganhar o foco
 		addWindowFocusListener(new WindowFocusListener() {
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
@@ -75,10 +149,17 @@ public class TelaPrincipal extends JFrame {
 		});
 	}
 
-	private void setUpMenuBar(boolean isAdmin) {
+	/**
+	 * Configura a barra de menus da tela principal.
+	 * 
+	 * @param isAdmin Indica se o usuário possui perfil de administrador.
+	 */
+	private void setUpMenuBar() {
+		// Criar a barra de menus
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
+		// Menu Cadastro
 		JMenu menuCadastro = new JMenu("Cadastro");
 		menuBar.add(menuCadastro);
 
@@ -98,6 +179,7 @@ public class TelaPrincipal extends JFrame {
 		menuUsuarios.setEnabled(isAdmin);
 		menuCadastro.add(menuUsuarios);
 
+		// Menu Relatórios
 		JMenu menuRelatorios = new JMenu("Relatórios");
 		menuRelatorios.setEnabled(isAdmin);
 		menuBar.add(menuRelatorios);
@@ -117,9 +199,10 @@ public class TelaPrincipal extends JFrame {
 		JMenuItem usuariosItem = new JMenuItem("Usuarios");
 		usuariosItem.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		usuariosItem.addActionListener(e -> gerarRelatoriosUsuarios());
 		menuRelatorios.add(usuariosItem);
-		usuariosItem.addActionListener(e-> gerarRelatoriosUsuarios());
 
+		// Menu Ajuda
 		JMenu menuAjuda = new JMenu("Ajuda");
 		menuBar.add(menuAjuda);
 
@@ -128,6 +211,7 @@ public class TelaPrincipal extends JFrame {
 		sobreItem.addActionListener(e -> exibirSobre());
 		menuAjuda.add(sobreItem);
 
+		// Menu Opções
 		JMenu menuOpcoes = new JMenu("Opções");
 		menuBar.add(menuOpcoes);
 
@@ -142,40 +226,88 @@ public class TelaPrincipal extends JFrame {
 		menuOpcoes.add(sairItem);
 	}
 
+	/**
+	 * Abre a tela de cadastro de cliente.
+	 */
 	private void abrirCadastroCliente() {
-		if (isAdmin) {
-			new GerenciarClientes().setVisible(true);
+		if (cliDAO.getStatusConnection()) {
+			if (isAdmin) {
+				new GerenciarClientes().setVisible(true);
+			} else {
+				new CriarCliente().setVisible(true);
+			}
 		} else {
-			new CriarCliente().setVisible(true);
+			util.AvisoDeConexão();
 		}
 	}
 
+	/**
+	 * Abre a tela de cadastro de ordem de serviço.
+	 */
 	private void abrirCadastroOS() {
-		new GerenciarOS(user).setVisible(true);
+		if (userDao.getStatusConnection()) {
+			new GerenciarOS(user).setVisible(true);
+		} else {
+			util.AvisoDeConexão();
+		}
 	}
 
+	/**
+	 * Abre a tela de cadastro de usuários.
+	 */
 	private void abrirCadastroUsuarios() {
-		new GerenciarUsuarios(user).setVisible(true);
+		if (userDao.getStatusConnection()) {
+			new GerenciarUsuarios(user).setVisible(true);
+		} else {
+			util.AvisoDeConexão();
+		}
 	}
-	
+
+	/**
+	 * Gera o relatório de usuários.
+	 */
 	private void gerarRelatoriosUsuarios() {
-		relatorios.getRelatorioUsuarios();
+		if (relatorios.getStatusConnection()) {
+			relatorios.getRelatorioUsuarios();
+		} else {
+			util.AvisoDeConexão();
+		}
 	}
 
+	/**
+	 * Gera o relatório de serviços.
+	 */
 	private void gerarRelatorioServicos() {
-		relatorios.getRelatorioServicos();
+		if (relatorios.getStatusConnection()) {
+			relatorios.getRelatorioServicos();
+		} else {
+			util.AvisoDeConexão();
+		}
 	}
 
+	/**
+	 * Gera o relatório de clientes.
+	 */
 	private void gerarRelatorioClientes() {
-		relatorios.getRelatorioClientes();
+		if (relatorios.getStatusConnection()) {
+			relatorios.getRelatorioClientes();
+		} else {
+			util.AvisoDeConexão();
+		}
 	}
 
+	/**
+	 * Exibe informações sobre o sistema.
+	 */
 	private void exibirSobre() {
 		JOptionPane.showMessageDialog(this,
-				"Sistema de Ordem e Serviço - Versão 5.0 \nDesenvolvido Por: ViniciusDizatnikis", "Sobre",
+				"Sistema de Ordem e Serviço - Versão 1.0 \nDesenvolvido Por: ViniciusDizatnikis", "Sobre",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	/**
+	 * Executa o logoff do usuário atual e redireciona para a tela de login.
+	 */
 	private void logOffAction() {
 		int confirmacao = JOptionPane.showConfirmDialog(this, "Deseja fazer logoff?", "Confirmação",
 				JOptionPane.YES_NO_OPTION);
@@ -185,6 +317,9 @@ public class TelaPrincipal extends JFrame {
 		}
 	}
 
+	/**
+	 * Fecha o sistema após confirmação do usuário.
+	 */
 	private void sairAction() {
 		int confirmacao = JOptionPane.showConfirmDialog(this, "Tem certeza de que deseja sair do sistema?", "Sair",
 				JOptionPane.YES_NO_OPTION);
@@ -193,7 +328,13 @@ public class TelaPrincipal extends JFrame {
 		}
 	}
 
-	private void setUpContentPane(Usuario usuInfo) {
+	/**
+	 * Configura o painel de conteúdo da tela principal, incluindo a tabela de
+	 * ordens de serviço.
+	 * 
+	 * @param usuInfo Informações do usuário.
+	 */
+	private void setUpContentPane() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBackground(util.getBackgroundColor());
@@ -222,16 +363,22 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(status);
 	}
 
+	/**
+	 * Atualiza o status de conexão com o banco de dados.
+	 */
 	private void atualizarStatus() {
-		boolean conectado = userDao.getStatus();
+		boolean conectado = userDao.getStatusConnection();
 		String mensagem = conectado ? "Status: Conectado ao banco de dados"
 				: "Status: Erro ao conectar ao banco de dados";
-		Color cor = conectado ? SUCCESS_COLOR : ERROR_COLOR;
+		Color cor = conectado ? util.SUCCESS_COLOR : util.ERROR_COLOR;
 
 		status.setText(mensagem);
 		status.setForeground(cor);
 	}
 
+	/**
+	 * Configura a tabela de ordens de serviço.
+	 */
 	private void setUpTable() {
 		String[] columnNames = new String[] { "ID Venda", "Data", "Equipamento", "Defeito", "Serviço", "Valor",
 				"Cliente", "Técnico(a)" };
@@ -247,9 +394,6 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(scrollPane);
 		scrollPane.setBounds(10, 92, 927, 555);
 
-		JPopupMenu popupMenu = new JPopupMenu();
-		setUpTablePopupMenu(table, popupMenu);
-
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -261,6 +405,11 @@ public class TelaPrincipal extends JFrame {
 
 	}
 
+	/**
+	 * Carrega os dados da tabela com as ordens de serviço.
+	 * 
+	 * @param model Modelo da tabela onde os dados serão carregados.
+	 */
 	private void carregarDados(DefaultTableModel model) {
 		// Limpa os dados antigos antes de carregar os novos
 		model.setRowCount(0);
@@ -273,12 +422,11 @@ public class TelaPrincipal extends JFrame {
 		}
 	}
 
-	private void setUpTablePopupMenu(JTable table, JPopupMenu popupMenu) {
-		JMenuItem inspecionarItem = new JMenuItem("Inspecionar");
-		inspecionarItem.addActionListener(e -> inspectItem(table));
-		popupMenu.add(inspecionarItem);
-	}
-
+	/**
+	 * Exibe os detalhes de uma ordem de serviço.
+	 * 
+	 * @param table A tabela onde o item será inspecionado.
+	 */
 	private void inspectItem(JTable table) {
 		int rowIndex = table.getSelectedRow();
 		if (rowIndex != -1) {
@@ -294,6 +442,11 @@ public class TelaPrincipal extends JFrame {
 		}
 	}
 
+	/**
+	 * Configura o ícone do usuário exibido na tela.
+	 * 
+	 * @param contentPane Painel de conteúdo onde o ícone será adicionado.
+	 */
 	private void setUpUserIcon(JPanel contentPane) {
 		JLabel usuarioIcon = new JLabel();
 		usuarioIcon.setHorizontalAlignment(SwingConstants.CENTER);
@@ -302,6 +455,11 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(usuarioIcon);
 	}
 
+	/**
+	 * Configura os detalhes do usuário (nome e saudação) exibidos na tela.
+	 * 
+	 * @param contentPane Painel de conteúdo onde os detalhes serão exibidos.
+	 */
 	private void setUpUserDetails(JPanel contentPane) {
 		String splitName = user.getNome();
 		if (user.getNome().contains(" ")) {
@@ -315,6 +473,9 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(lblUsuario);
 	}
 
+	/**
+	 * Configura a área de data e hora exibida na tela.
+	 */
 	private void setUpDateAndTimePanel() {
 		JPanel desktopPanel_1 = new JPanel();
 		desktopPanel_1.setBackground(Color.GRAY);

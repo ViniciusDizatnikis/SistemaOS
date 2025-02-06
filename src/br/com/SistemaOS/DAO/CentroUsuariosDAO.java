@@ -1,28 +1,50 @@
+/**
+ * Classe CentroUsuariosDAO
+ * Esta classe é responsável por realizar operações no banco de dados
+ * relacionadas aos usuários do sistema, como criar, atualizar, deletar e consultar dados.
+ */
 package br.com.SistemaOS.DAO;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import br.com.SistemaOS.modelo.OrdemServico;
 import br.com.SistemaOS.modelo.Usuario;
 
+/**
+ * Classe Responsável pelo CRUD Dos Usuário
+ */
 public class CentroUsuariosDAO {
-
+	/**
+	 * Conexão Com Banco de Dados
+	 */
     private Connection con;
-    private boolean status = false;
 
+    /**
+     * Construtor que inicializa a conexão com o banco de dados.
+     */
     public CentroUsuariosDAO() {
         this.con = ModuloDeConexao.conector(); 
-        if (con != null) {
-            status = true;
-        }
     }
 
-    public Boolean getStatus() {
-        return status;
+    /**
+     * Retorna o status da conexão com o banco de dados.
+     * 
+     * @return {@code true} se a conexão estiver ativa, {@code false} caso contrário.
+     */
+    public Boolean getStatusConnection() {
+        return con != null;
     }
 
+    /**
+     * Cria um novo usuário no banco de dados.
+     * 
+     * @param name  Nome do usuário.
+     * @param fone  Telefone do usuário.
+     * @param login Login do usuário.
+     * @param senha Senha do usuário.
+     * @param perfil Perfil do usuário.
+     * @return {@code true} se a inserção foi bem-sucedida, {@code false} caso contrário.
+     */
     public boolean criarUsuario(String name, String fone, String login, String senha, String perfil) {
         String sql = "INSERT INTO usuarios (usuario, fone, login, senha, perfil) VALUES (?, ?, ?, ?, ?);";
 
@@ -41,6 +63,13 @@ public class CentroUsuariosDAO {
         }
     }
 
+    /**
+     * Realiza o login de um usuário.
+     * 
+     * @param nome  Login do usuário.
+     * @param senha Senha do usuário.
+     * @return Um objeto {@link Usuario} se as credenciais forem válidas, {@code null} caso contrário.
+     */
     public Usuario login(String nome, String senha) {
         String sql = "SELECT * FROM usuarios WHERE login=? AND senha=?";
 
@@ -67,6 +96,11 @@ public class CentroUsuariosDAO {
         return null;
     }
 
+    /**
+     * Obtém a lista de todos os usuários cadastrados.
+     * 
+     * @return Uma lista de objetos {@link Usuario}.
+     */
     public List<Usuario> getUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM usuarios";
@@ -91,6 +125,11 @@ public class CentroUsuariosDAO {
         return usuarios;
     }
 
+    /**
+     * Exclui um usuário do banco de dados pelo ID.
+     * 
+     * @param id ID do usuário a ser excluído.
+     */
     public void deleteUser(int id) {
         String sqlDeleteRelated = "DELETE FROM tbos WHERE iduser = ?";
         String sqlDeleteUser = "DELETE FROM usuarios WHERE iduser = ?";
@@ -108,7 +147,7 @@ public class CentroUsuariosDAO {
                 int rowsAffected = stmtUser.executeUpdate();
 
                 if (!(rowsAffected > 0)) {
-                	System.out.println("Nenhum usuário encontrado com o ID " + id + ".");
+                    System.out.println("Nenhum usuário encontrado com o ID " + id + ".");
                 } 
             }
 
@@ -130,6 +169,13 @@ public class CentroUsuariosDAO {
         }
     }
 
+    /**
+     * Verifica se um login já existe no banco de dados.
+     * 
+     * @param object Login a ser verificado.
+     * @return {@code true} se o login existir, {@code false} caso contrário.
+     * @throws IllegalArgumentException Se o parâmetro de login for nulo ou vazio.
+     */
     public boolean loginExistente(Object object) {
         String login = object != null ? object.toString() : null;
 
@@ -152,6 +198,16 @@ public class CentroUsuariosDAO {
         return false;
     }
 
+    /**
+     * Atualiza os dados de um usuário.
+     * 
+     * @param nome   Nome do usuário.
+     * @param fone   Telefone do usuário.
+     * @param login  Login do usuário.
+     * @param senha  Senha do usuário.
+     * @param perfil Perfil do usuário.
+     * @param id     ID do usuário a ser atualizado.
+     */
     public void updateUser(Object nome, Object fone, Object login, Object senha, Object perfil, Integer id) {
         StringBuilder query = new StringBuilder("UPDATE usuarios SET ");
         ArrayList<Object> params = new ArrayList<>();
@@ -194,6 +250,12 @@ public class CentroUsuariosDAO {
         }
     }
 
+    /**
+     * Gera um relatório de Ordens de Serviço associado a um usuário.
+     * 
+     * @param name Nome do técnico.
+     * @return Um array bidimensional com os dados das ordens de serviço.
+     */
     public Object[][] GetRelatorioOrdemEServico(String name) {
         String sql = "SELECT O.os, O.equipamento, O.defeito, O.servico, O.valor, "
                    + "C.nome AS cliente, C.fone AS contato, "

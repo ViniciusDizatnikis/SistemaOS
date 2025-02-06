@@ -18,219 +18,264 @@ import br.com.SistemaOS.Telas.Detalhes.DetalhesCliente;
 import br.com.SistemaOS.Utils.ScreenTools;
 import br.com.SistemaOS.modelo.Cliente;
 
+/**
+ * Tela para gerenciar os clientes do sistema.
+ */
 public class GerenciarClientes extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel painelPrincipal;
+    private static final long serialVersionUID = 1L;
 
-	// Campo de Pesquisa
-	private JTextField campoPesquisa;
+    /** Painel principal que contém todos os componentes da interface. */
+    private JPanel painelPrincipal;
 
-	// Botões
-	private JButton botaoCriarCliente;
+    /** Campo de texto para pesquisa de clientes. */
+    private JTextField campoPesquisa;
 
-	// Tabela de Clientes
-	private JTable tabelaClientes;
-	private DefaultTableModel modeloTabela;
+    /** Botão para adicionar um novo cliente. */
+    private JButton botaoCriarCliente;
 
-	// Utilitários
-	private ScreenTools screenTools = new ScreenTools();
-	private CentroClientesDAO clienteDAO = new CentroClientesDAO();
+    /** Tabela que exibe a lista de clientes. */
+    private JTable tabelaClientes;
+    /** Modelo da tabela que define a estrutura dos dados exibidos. */
+    private DefaultTableModel modeloTabela;
 
-	// Lista 
-	private List<Cliente> listaTodosClientes;
-	private List<Cliente> clientesFiltrados = new ArrayList<>();
+    /** Utilitário para manipulação de elementos da tela. */
+    private ScreenTools util = new ScreenTools();
+    /** DAO para operações relacionadas aos clientes. */
+    private CentroClientesDAO clienteDAO = new CentroClientesDAO();
 
-	public GerenciarClientes() {
-		setResizable(false);
-		setTitle("Clientes");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1020, 540);
-		setLocationRelativeTo(null);
-		setIconImage(screenTools.getLogo());
+    /** Lista de todos os clientes cadastrados no sistema. */
+    private List<Cliente> listaTodosClientes;
+    /** Lista de clientes filtrados com base na pesquisa. */
+    private List<Cliente> clientesFiltrados = new ArrayList<>();
 
-		painelPrincipal = new JPanel();
-		painelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
-		painelPrincipal.setBackground(screenTools.getBackgroundColor());
-		setContentPane(painelPrincipal);
-		painelPrincipal.setLayout(null);
+    /**
+     * Construtor da tela GerenciarClientes.
+     */
+    public GerenciarClientes() {
+        setResizable(false);
+        setTitle("Clientes");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 1020, 540);
+        setLocationRelativeTo(null);
+        setIconImage(util.getLogo());
 
-		inicializarComponentes();
-		carregarClientes();
-	}
+        painelPrincipal = new JPanel();
+        painelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
+        painelPrincipal.setBackground(util.getBackgroundColor());
+        setContentPane(painelPrincipal);
+        painelPrincipal.setLayout(null);
 
-	private void inicializarComponentes() {
-		inicializarLabels();
-		inicializarTabela();
-		inicializarFerramentas();
-		inicializarListeners();
-	}
+        inicializarComponentes();
+        carregarClientes();
+    }
 
-	private void inicializarLabels() {
-		painelPrincipal.add(screenTools.criarLabel("Clientes", 429, 11, 139, 47, 30, true));
-	}
+    /**
+     * Inicializa os componentes da tela.
+     */
+    private void inicializarComponentes() {
+        inicializarLabels();
+        inicializarTabela();
+        inicializarFerramentas();
+        inicializarListeners();
+    }
 
-	private void inicializarTabela() {
-	    modeloTabela = new DefaultTableModel();
-	    tabelaClientes = new JTable(modeloTabela) {
-	        @Override
-	        public boolean isCellEditable(int row, int column) {
-	            return false;
-	        }
-	    };
+    /**
+     * Inicializa os labels da tela.
+     */
+    private void inicializarLabels() {
+        painelPrincipal.add(util.criarLabel("Clientes", 429, 11, 139, 47, 30, true));
+    }
 
-	    JScrollPane painelRolagem = new JScrollPane(tabelaClientes);
-	    painelRolagem.setBounds(10, 127, 984, 368);
-	    painelPrincipal.add(painelRolagem);
+    /**
+     * Inicializa a tabela de clientes.
+     */
+    private void inicializarTabela() {
+        modeloTabela = new DefaultTableModel();
+        tabelaClientes = new JTable(modeloTabela) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
-	    tabelaClientes.setRowHeight(25);
-	    tabelaClientes.setFillsViewportHeight(true);
-	    tabelaClientes.getTableHeader().setReorderingAllowed(false);
-	    tabelaClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane painelRolagem = new JScrollPane(tabelaClientes);
+        painelRolagem.setBounds(10, 127, 984, 368);
+        painelPrincipal.add(painelRolagem);
 
-	    tabelaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
-	        @Override
-	        public void mouseClicked(java.awt.event.MouseEvent e) {
-	            if (e.getClickCount() == 2 && tabelaClientes.getSelectedRow() != -1) {
-	                Cliente clienteSelecionado;
-	                int linhaSelecionada = tabelaClientes.getSelectedRow();
-	                
-	                if (campoPesquisa.getText().equals("Digite o nome do cliente...") || campoPesquisa.getText().trim().isEmpty()) {
-	                    clienteSelecionado = listaTodosClientes.get(linhaSelecionada); 
-	                } else {
-	                    clienteSelecionado = clientesFiltrados.get(linhaSelecionada); 
-	                }
+        tabelaClientes.setRowHeight(25);
+        tabelaClientes.setFillsViewportHeight(true);
+        tabelaClientes.getTableHeader().setReorderingAllowed(false);
+        tabelaClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-	                DetalhesCliente telaDetalhes = new DetalhesCliente(clienteSelecionado.getId(),
-	                        clienteSelecionado.getNome(), clienteSelecionado.getFone(),
-	                        clienteSelecionado.getEndereco(), clienteSelecionado.getEmail());
-	                telaDetalhes.setVisible(true);
-	            }
-	        }
-	    });
-	}
+        tabelaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2 && tabelaClientes.getSelectedRow() != -1) {
+                    Cliente clienteSelecionado;
+                    int linhaSelecionada = tabelaClientes.getSelectedRow();
 
+                    if (campoPesquisa.getText().equals("Digite o nome do cliente...") || campoPesquisa.getText().trim().isEmpty()) {
+                        clienteSelecionado = listaTodosClientes.get(linhaSelecionada);
+                    } else {
+                        clienteSelecionado = clientesFiltrados.get(linhaSelecionada);
+                    }
 
-	private void inicializarFerramentas() {
-		campoPesquisa = new JTextField("Digite o nome do cliente...");
-		screenTools.estilizarField(campoPesquisa, "");
-		campoPesquisa.setBounds(731, 84, 263, 32);
-		painelPrincipal.add(campoPesquisa);
+                    if (!clienteDAO.getStatusConnection()) {
+                        util.AvisoDeConexão();
+                        return;
+                    }
+                    DetalhesCliente telaDetalhes = new DetalhesCliente(clienteSelecionado.getId(),
+                            clienteSelecionado.getNome(), clienteSelecionado.getFone(),
+                            clienteSelecionado.getEndereco(), clienteSelecionado.getEmail());
+                    telaDetalhes.setVisible(true);
+                }
+            }
+        });
+    }
 
-		botaoCriarCliente = new JButton("Adicionar Cliente");
-		screenTools.estilizarBotao(botaoCriarCliente);
-		botaoCriarCliente.setBounds(10, 93, 194, 23);
-		botaoCriarCliente.setFocusPainted(false);
-		painelPrincipal.add(botaoCriarCliente);
-	}
+    /**
+     * Inicializa os campos de entrada e botões da tela.
+     */
+    private void inicializarFerramentas() {
+        campoPesquisa = new JTextField("Digite o nome do cliente...");
+        util.estilizarField(campoPesquisa, "");
+        campoPesquisa.setBounds(731, 84, 263, 32);
+        painelPrincipal.add(campoPesquisa);
 
-	private void inicializarListeners() {
-		botaoCriarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
-			public void mouseEntered(java.awt.event.MouseEvent e) {
-				botaoCriarCliente.setBackground(new Color(33, 116, 133));
-				botaoCriarCliente.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
+        botaoCriarCliente = new JButton("Adicionar Cliente");
+        util.estilizarBotao(botaoCriarCliente);
+        botaoCriarCliente.setBounds(10, 93, 194, 23);
+        botaoCriarCliente.setFocusPainted(false);
+        painelPrincipal.add(botaoCriarCliente);
+    }
 
-			@Override
-			public void mouseExited(java.awt.event.MouseEvent e) {
-				botaoCriarCliente.setBackground(new Color(63, 182, 207));
-				botaoCriarCliente.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-		});
+    /**
+     * Inicializa os listeners para os componentes da tela.
+     */
+    private void inicializarListeners() {
+        botaoCriarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                botaoCriarCliente.setBackground(new Color(33, 116, 133));
+                botaoCriarCliente.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
 
-		botaoCriarCliente.addActionListener(e -> {
-			CriarCliente frame = new CriarCliente();
-			frame.setVisible(true);
-		});
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                botaoCriarCliente.setBackground(new Color(63, 182, 207));
+                botaoCriarCliente.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
 
-		campoPesquisa.addFocusListener(new java.awt.event.FocusAdapter() {
-			@Override
-			public void focusGained(java.awt.event.FocusEvent e) {
-				if (campoPesquisa.getText().equals("Digite o nome do cliente...")) {
-					campoPesquisa.setText("");
-				}
-			}
+        botaoCriarCliente.addActionListener(e -> {
+            if (!clienteDAO.getStatusConnection()) {
+                util.AvisoDeConexão();
+                return;
+            }
+            CriarCliente frame = new CriarCliente();
+            frame.setVisible(true);
+        });
 
-			@Override
-			public void focusLost(java.awt.event.FocusEvent e) {
-				if (campoPesquisa.getText().isEmpty()) {
-					campoPesquisa.setText("Digite o nome do cliente...");
-					carregarClientes();
-				}
-			}
-		});
+        campoPesquisa.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (campoPesquisa.getText().equals("Digite o nome do cliente...")) {
+                    campoPesquisa.setText("");
+                }
+            }
 
-		campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				filtrarClientes(campoPesquisa.getText().trim());
-			}
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (campoPesquisa.getText().isEmpty()) {
+                    campoPesquisa.setText("Digite o nome do cliente...");
+                    carregarClientes();
+                }
+            }
+        });
 
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				filtrarClientes(campoPesquisa.getText().trim());
-			}
+        campoPesquisa.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrarClientes(campoPesquisa.getText().trim());
+            }
 
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				filtrarClientes(campoPesquisa.getText().trim());
-			}
-		});
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrarClientes(campoPesquisa.getText().trim());
+            }
 
-		addWindowFocusListener(new WindowFocusListener() {
-			@Override
-			public void windowGainedFocus(WindowEvent e) {
-				campoPesquisa.setText("Digite o nome do cliente...");
-				carregarClientes();
-			}
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrarClientes(campoPesquisa.getText().trim());
+            }
+        });
 
-			@Override
-			public void windowLostFocus(WindowEvent e) {
-			}
-		});
-	}
+        addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                campoPesquisa.setText("Digite o nome do cliente...");
+                carregarClientes();
+            }
 
-	private void carregarClientes() {
-		listaTodosClientes = clienteDAO.getClientes();
-		atualizarTabela(listaTodosClientes);
-	}
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+            }
+        });
+    }
 
-	private void atualizarTabela(List<Cliente> clientes) {
-		String[] colunas = { "ID", "Nome", "Endereço", "Telefone", "Email" };
-		Object[][] dadosTabela = new Object[clientes.size()][colunas.length];
+    /**
+     * Carrega todos os clientes do banco de dados.
+     */
+    private void carregarClientes() {
+        if (!clienteDAO.getStatusConnection()) {
+            util.AvisoDeConexão();
+            return;
+        }
+        listaTodosClientes = clienteDAO.getClientes();
+        atualizarTabela(listaTodosClientes);
+    }
 
-		for (int i = 0; i < clientes.size(); i++) {
-			Cliente cliente = clientes.get(i);
-			dadosTabela[i] = new Object[] { cliente.getId(), cliente.getNome(),
-					cliente.getEndereco().isEmpty() ? "Não Informado" : cliente.getEndereco(), cliente.getFone(),
-					cliente.getEmail().isEmpty() ? "Não Informado" : cliente.getEmail() };
-		}
+    /**
+     * Atualiza a tabela com a lista de clientes.
+     *
+     * @param clientes A lista de clientes a ser exibida.
+     */
+    private void atualizarTabela(List<Cliente> clientes) {
+        String[] colunas = { "ID", "Nome", "Endereço", "Telefone", "Email" };
+        Object[][] dadosTabela = new Object[clientes.size()][colunas.length];
 
-		modeloTabela.setDataVector(dadosTabela, colunas);
-	}
+        for (int i = 0; i < clientes.size(); i++) {
+            Cliente cliente = clientes.get(i);
+            dadosTabela[i] = new Object[] { cliente.getId(), cliente.getNome(),
+                    cliente.getEndereco().isEmpty() ? "Não Informado" : cliente.getEndereco(), cliente.getFone(),
+                    cliente.getEmail().isEmpty() ? "Não Informado" : cliente.getEmail() };
+        }
 
-	private void filtrarClientes(String textoPesquisa) {
-		clientesFiltrados.clear(); 
+        modeloTabela.setDataVector(dadosTabela, colunas);
+    }
 
-		if (textoPesquisa.trim().isEmpty() || textoPesquisa.equals("Digite o nome do cliente...")) {
-			carregarClientes();
-		} else {
-			for (Cliente cliente : listaTodosClientes) {
-				if (cliente.getNome().toLowerCase().contains(textoPesquisa.toLowerCase())
-						|| cliente.getEndereco().toLowerCase().contains(textoPesquisa.toLowerCase())
-						|| cliente.getFone().toLowerCase().contains(textoPesquisa.toLowerCase())
-						|| cliente.getEmail().toLowerCase().contains(textoPesquisa.toLowerCase())) {
-					clientesFiltrados.add(cliente);
-				}
-			}
+    /**
+     * Filtra os clientes com base no texto de pesquisa.
+     *
+     * @param textoPesquisa O texto usado para filtrar os clientes.
+     */
+    private void filtrarClientes(String textoPesquisa) {
+        clientesFiltrados.clear();
 
-			atualizarTabela(clientesFiltrados);
-		}
-	}
+        if (textoPesquisa.trim().isEmpty() || textoPesquisa.equals("Digite o nome do cliente...")) {
+            carregarClientes();
+        } else {
+            for (Cliente cliente : listaTodosClientes) {
+                if (cliente.getNome().toLowerCase().contains(textoPesquisa.toLowerCase())
+                        || cliente.getEndereco().toLowerCase().contains(textoPesquisa.toLowerCase())
+                        || cliente.getFone().toLowerCase().contains(textoPesquisa.toLowerCase())
+                        || cliente.getEmail().toLowerCase().contains(textoPesquisa.toLowerCase())) {
+                    clientesFiltrados.add(cliente);
+                }
+            }
 
-	public static void main(String[] args) {
-		GerenciarClientes telaClientes = new GerenciarClientes();
-		telaClientes.setVisible(true);
-	}
+            atualizarTabela(clientesFiltrados);
+        }
+    }
 }
