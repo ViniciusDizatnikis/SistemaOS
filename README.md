@@ -13,10 +13,13 @@
 
  Atualmente, o sistema oferece as seguintes funcionalidades:
 
- - **CRUD Usuários**: Permite ao Administrador e aos usuários que tem a permissão "Admin" a criar, editar, deletar e ver usuarios cadastrado no sistema.
- - **CRUD clientes**: Assim como os usuarios, possui a função para os clientes.
- - **Validações**: Possui validações para quase todas as possibilidades para que não haja bugs.
- - Futuramente, o sistema incluirá funcionalidades adicionais como a geração de relatórios e a gestão de ordens de serviço mais complexas
+- **CRUD Usuários**: Permite ao Administrador e aos usuários com a permissão "Admin" criar, editar, deletar e visualizar usuários cadastrados no sistema.  
+- **CRUD Clientes**: Funcionalidade semelhante à de usuários, permitindo a gestão completa dos clientes.  
+- **Validações**: O sistema possui validações robustas para evitar erros e garantir uma experiência segura e eficiente.  
+- **Geração de Relatórios**: Agora é possível gerar relatórios detalhados de clientes, serviços e usuários, facilitando o controle e a gestão.  
+- **Formatação de Números e Preços**: Os valores financeiros e numéricos são formatados corretamente para melhor visualização.  
+- **Tela Principal Ajustada**: A interface da tela principal foi melhorada para proporcionar uma navegação mais intuitiva e eficiente.  
+- **Futuras Funcionalidades**: O sistema continuará evoluindo, trazendo melhorias na gestão de ordens de serviço e outras otimizações.  
 
  ## Status do Projeto
 
@@ -24,7 +27,7 @@
 
  ## Tecnologias Utilizadas
 
- - **Java** (JDK 8 ou superior)
+ - **Java** (JDK 8 ou superior, atualmente JDK 23)
  - **JFrame** para a construção da interface gráfica
  - **MySQL** para a gestão de dados."
 
