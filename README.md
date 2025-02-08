@@ -44,9 +44,12 @@ Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcion
 
 ## Avisos
 
+### JDK 23
 Para executar o projeto na sua IDE, você precisa usar o JDK 23. Caso não tenha, você pode baixá-lo por este link:
 
 [JDK23](https://www.oracle.com/java/technologies/downloads/#jdk23-windows)
+
+### Windowbuilder
 
 Verifique se você possui o WindowBuilder. Caso não tenha, siga estes passos:
 
@@ -59,6 +62,8 @@ Verifique se você possui o WindowBuilder. Caso não tenha, siga estes passos:
     
 4. Selecione o WindowBuilder e clique em "Finish".
 
+### Ireport
+   
 Caso precise do Ireport, você pode baixá-lo por aqui: [Ireport]([https://www.oracle.com/java/technologies/downloads/#jdk23-windows](https://sourceforge.net/projects/erpbarcode/files/JasperSoft/iReport-5.6.0-windows-installer.exe/download))
 
 Para executar o Ireport, você precisa do Java 7, que pode ser baixado aqui: [Java 7](https://www.oracle.com/java/technologies/javase/javase7-archive-downloads.html)
