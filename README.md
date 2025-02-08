@@ -1,35 +1,80 @@
 # Sistema de Ordem de Serviço
 
- Este projeto tem como objetivo aprender e praticar os conceitos básicos de **JFrame** e **SQL**. Foi desenvolvido com ferramentas básicas, sem o uso de frameworks avançados, para proporcionar uma experiência prática de como funciona o desenvolvimento de aplicações com interface gráfica e banco de dados.
+Este projeto tem como objetivo aprender e praticar os conceitos básicos de **JFrame** e **SQL**. Foi desenvolvido com ferramentas básicas, sem o uso de frameworks avançados, para proporcionar uma experiência prática de como funciona o desenvolvimento de aplicações com interface gráfica e banco de dados.
 
- ## Objetivo
+## Objetivo
 
- O projeto visa aprender e praticar conceitos básicos de JFrame para criação de interfaces gráficas e SQL para interação com banco de dados, através da implementação de um Sistema de Ordem de Serviço. A ideia é explorar como essas tecnologias podem ser combinadas para desenvolver uma aplicação prática.
+O projeto visa aprender e praticar conceitos básicos de JFrame para criação de interfaces gráficas e SQL para interação com banco de dados, através da implementação de um Sistema de Ordem de Serviço. A ideia é explorar como essas tecnologias podem ser combinadas para desenvolver uma aplicação prática que facilite a gestão de ordens de serviço, clientes e usuários.
 
- - **JFrame** para criar interfaces gráficas simples.
- - **SQL** para interação com banco de dados, realizando operações como inserção, atualização, consulta e exclusão de dados.
+- **JFrame** para criar interfaces gráficas simples.
+- **SQL** para interação com banco de dados, realizando operações como inserção, atualização, consulta e exclusão de dados.
 
- ## Funcionalidades
+## Funcionalidades
 
- Atualmente, o sistema oferece as seguintes funcionalidades:
+Atualmente, o sistema oferece as seguintes funcionalidades:
 
-- **CRUD Usuários**: Permite ao Administrador e aos usuários com a permissão "Admin" criar, editar, deletar e visualizar usuários cadastrados no sistema.  
-- **CRUD Clientes**: Funcionalidade semelhante à de usuários, permitindo a gestão completa dos clientes.  
-- **Validações**: O sistema possui validações robustas para evitar erros e garantir uma experiência segura e eficiente.  
-- **Geração de Relatórios**: Agora é possível gerar relatórios detalhados de clientes, serviços e usuários, facilitando o controle e a gestão.  
-- **Formatação de Números e Preços**: Os valores financeiros e numéricos são formatados corretamente para melhor visualização.  
-- **Tela Principal Ajustada**: A interface da tela principal foi melhorada para proporcionar uma navegação mais intuitiva e eficiente.  
+### CRUD Usuários
+Permite ao Administrador e aos usuários com a permissão "Admin" criar, editar, deletar e visualizar usuários cadastrados no sistema.
 
- ## Status do Projeto
+### CRUD Clientes
+Funcionalidade semelhante à de usuários, permitindo a gestão completa dos clientes.
 
- Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcionalidades de **Clientes** e pretendo gerar um **arquivo executável** para facilitar os testes e a execução do sistema sem a necessidade de IDE.
+### Validações
+O sistema possui validações robustas para evitar erros e garantir uma experiência segura e eficiente.
 
- ## Tecnologias Utilizadas
+### Geração de Relatórios
+Agora é possível gerar relatórios detalhados de clientes, serviços e usuários, facilitando o controle e a gestão.
 
- - **Java** (JDK 23)
- - **JFrame** para a construção da interface gráfica
- - **MySQL** para a gestão de dados."
+### Formatação de Números e Preços
+Os valores financeiros e numéricos são formatados corretamente para melhor visualização.
 
+### Tela Principal Ajustada
+A interface da tela principal foi melhorada para proporcionar uma navegação mais intuitiva e eficiente.
+
+## Status do Projeto
+
+Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcionalidades de **Clientes** e pretendo gerar um **arquivo executável** para facilitar os testes e a execução do sistema sem a necessidade de IDE.
+
+## Tecnologias Utilizadas
+
+- **Java** (JDK 23): Linguagem de programação principal.
+- **JFrame**: Biblioteca para criação de interfaces gráficas em Java.
+- **MySQL**: Sistema de gerenciamento de banco de dados relacional.
+- **Ireport-5.6.0**: Ferramenta para geração de relatórios.
+
+## Avisos
+
+Para executar o projeto na sua IDE, você precisa usar o JDK 23. Caso não tenha, você pode baixá-lo por este link:
+
+[JDK23](https://www.oracle.com/java/technologies/downloads/#jdk23-windows)
+
+Verifique se você possui o WindowBuilder. Caso não tenha, siga estes passos:
+
+1. **NO ECLIPSE**: No painel principal, vá em "Help -> Install New Software".
+2. Clique em "Work with" e cole o seguinte link:
+    ```Link
+    WindowBuilder Latest Nightly - https://download.eclipse.org/windowbuilder/lastgoodbuild/
+    ```
+3. Selecione o WindowBuilder e clique em "Finish".
+
+Caso precise do Ireport, você pode baixá-lo por aqui:
+
+  [Ireport]([https://www.oracle.com/java/technologies/downloads/#jdk23-windows](https://sourceforge.net/projects/erpbarcode/files/JasperSoft/iReport-5.6.0-windows-installer.exe/download))
+  
+  Para executar o Ireport, você precisa do Java 7, que pode ser baixado aqui:
+  
+  [Java 7](https://www.oracle.com/java/technologies/javase/javase7-archive-downloads.html)
+
+  Para executar o Ireport com o Java 7, abra o bloco de notas como administrador e vá no local de instalação do Ireport: iReport-5.6.0\etc\ireport.conf e abra o arquivo. Na parte:
+
+  # default location of JDK/JRE, can be overridden by using --jdkhome <dir> switch
+  #jdkhome="/path/to/jdk"
+  
+  Logo abaixo, adicione a linha:
+  
+  jdkhome="C:\Program Files\Java\jdk1.7.0_80"
+
+    
  ## Como Executar
 
  1. Clone o repositório para o seu computador:
@@ -103,6 +148,11 @@ use essas credenciais para logar:
 
 ## Javadoc
 
-O projeto conta com documentação Javadoc detalhada, disponível em "Info/javadoc", que descreve todas as classes e métodos implementados, facilitando a compreensão e manutenção do código.
+O projeto conta com documentação Javadoc detalhada, disponível em Info/javadoc, que descreve todas as classes e métodos implementados, facilitando a compreensão e manutenção do código.
 
-Este projeto ainda está Finalizado. Se encontrar algum problema, sinta-se à vontade para abrir uma issue no repositório do GitHub.
+Este projeto ainda está em desenvolvimento. Se encontrar algum problema, sinta-se à vontade para abrir uma issue no repositório do GitHub.
+
+## Conclusão
+
+Este projeto é uma excelente oportunidade para aprender e praticar conceitos básicos de desenvolvimento de software com Java, JFrame e SQL. Sinta-se à vontade para contribuir, 
+testar e reportar quaisquer problemas encontrados. Sua contribuição é muito bem-vinda!
