@@ -42,9 +42,9 @@ import java.sql.SQLException;
 public class ModuloDeConexao {
 
     // URL de conexão com o banco de dados
-    private static final String URL = "jdbc:mysql://localhost:3306/sistemaOS?characterEncoding=utf-8";
-    private static final String USER = "dba";
-    private static final String PASSWORD = "SistemaOS@1234";
+    private static final String URL = "";
+    private static final String USER = "";
+    private static final String PASSWORD = "";
 
     /**
      * Construtor Nulo

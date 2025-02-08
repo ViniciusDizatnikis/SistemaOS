@@ -8,9 +8,9 @@ package br.com.SistemaOS.DAO;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.HashMap;
-import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -29,10 +29,11 @@ public class RelatoriosDAO {
 	}
 
 	/**
-     * Retorna o status da conexão com o banco de dados.
-     * 
-     * @return {@code true} se a conexão estiver ativa, {@code false} caso contrário.
-     */
+	 * Retorna o status da conexão com o banco de dados.
+	 * 
+	 * @return {@code true} se a conexão estiver ativa, {@code false} caso
+	 *         contrário.
+	 */
 	public boolean getStatusConnection() {
 		return con != null;
 	}
