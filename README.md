@@ -26,7 +26,7 @@
 
  ## Tecnologias Utilizadas
 
- - **Java** (JDK 8 ou superior, atualmente JDK 23)
+ - **Java** (JDK 23)
  - **JFrame** para a construção da interface gráfica
  - **MySQL** para a gestão de dados."
 
