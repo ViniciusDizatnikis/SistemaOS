@@ -52,18 +52,16 @@ Verifique se você possui o WindowBuilder. Caso não tenha, siga estes passos:
 
 1. **NO ECLIPSE**: No painel principal, vá em "Help -> Install New Software".
 2. Clique em "Work with" e cole o seguinte link:
+   
     ```Link
     WindowBuilder Latest Nightly - https://download.eclipse.org/windowbuilder/lastgoodbuild/
     ```
-3. Selecione o WindowBuilder e clique em "Finish".
+    
+4. Selecione o WindowBuilder e clique em "Finish".
 
-Caso precise do Ireport, você pode baixá-lo por aqui:
+Caso precise do Ireport, você pode baixá-lo por aqui: [Ireport]([https://www.oracle.com/java/technologies/downloads/#jdk23-windows](https://sourceforge.net/projects/erpbarcode/files/JasperSoft/iReport-5.6.0-windows-installer.exe/download))
 
-  [Ireport]([https://www.oracle.com/java/technologies/downloads/#jdk23-windows](https://sourceforge.net/projects/erpbarcode/files/JasperSoft/iReport-5.6.0-windows-installer.exe/download))
-  
-  Para executar o Ireport, você precisa do Java 7, que pode ser baixado aqui:
-  
-  [Java 7](https://www.oracle.com/java/technologies/javase/javase7-archive-downloads.html)
+Para executar o Ireport, você precisa do Java 7, que pode ser baixado aqui: [Java 7](https://www.oracle.com/java/technologies/javase/javase7-archive-downloads.html)
 
   Para executar o Ireport com o Java 7, abra o bloco de notas como administrador e vá no local de instalação do Ireport: iReport-5.6.0\etc\ireport.conf e abra o arquivo. Na parte:
 
@@ -75,15 +73,20 @@ Caso precise do Ireport, você pode baixá-lo por aqui:
   jdkhome="C:\Program Files\Java\jdk1.7.0_80"
 
 Para que sua IDE abra execute o modo de Impressão você deve adicionar 2 argumentos na hora de executar:
+
 1. vá em window->Preference->Installed JREs
-2. selecione o jdk e clique em "Edit"
-3. Adicione os seguintes Argumentos em Default VM arguments:
+   
+3. selecione o jdk e clique em "Edit"
+   
+5. Adicione os seguintes Argumentos em Default VM arguments:
+   
    ```Argumentos
    --add-opens Java.base/Java.lang=ALL-UNNAMED
    --add-opens Java.base/Java.util=ALL-UNNAMED
    ```
-4. Clique em "Finish"
-5. 
+   
+7. Clique em "Finish"
+   
  ## Como Executar
 
  1. Clone o repositório para o seu computador:
