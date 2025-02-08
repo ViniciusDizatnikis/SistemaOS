@@ -67,14 +67,23 @@ Caso precise do Ireport, você pode baixá-lo por aqui:
 
   Para executar o Ireport com o Java 7, abra o bloco de notas como administrador e vá no local de instalação do Ireport: iReport-5.6.0\etc\ireport.conf e abra o arquivo. Na parte:
 
-  # default location of JDK/JRE, can be overridden by using --jdkhome <dir> switch
+  #default location of JDK/JRE, can be overridden by using --jdkhome <dir> switch
   #jdkhome="/path/to/jdk"
   
   Logo abaixo, adicione a linha:
   
   jdkhome="C:\Program Files\Java\jdk1.7.0_80"
 
-    
+Para que sua IDE abra execute o modo de Impressão você deve adicionar 2 argumentos na hora de executar:
+1. vá em window->Preference->Installed JREs
+2. selecione o jdk e clique em "Edit"
+3. Adicione os seguintes Argumentos em Default VM arguments:
+   ```Argumentos
+   --add-opens Java.base/Java.lang=ALL-UNNAMED
+   --add-opens Java.base/Java.util=ALL-UNNAMED
+   ```
+4. Clique em "Finish"
+5. 
  ## Como Executar
 
  1. Clone o repositório para o seu computador:
