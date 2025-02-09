@@ -62,7 +62,6 @@ public class ModuloDeConexao {
         try {
             // Carrega o driver JDBC do MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
-            // Estabelece a conexão com os parâmetros especificados
             con = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException e) {
             System.err.println("Driver JDBC não encontrado: " + e.getMessage());

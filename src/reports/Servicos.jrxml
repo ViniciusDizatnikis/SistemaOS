@@ -47,10 +47,6 @@ JOIN usuarios AS U ON O.iduser = U.iduser;]]>
 	</background>
 	<title>
 		<band height="159" splitType="Stretch">
-			<image>
-				<reportElement x="0" y="0" width="107" height="101" uuid="46c3f79c-d0c1-4d0a-bb1e-0027542958b2"/>
-				<imageExpression><![CDATA["C:\\Users\\vdiza\\Documents\\SistemaOS\\src\\br\\com\\SistemaOS\\Icones\\icon\\Logo.png"]]></imageExpression>
-			</image>
 			<textField pattern="dd/MM/yyyy">
 				<reportElement x="441" y="119" width="114" height="40" uuid="c4f7d86f-0ad1-4fa5-a8b2-2524c82f1eec"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -66,7 +62,7 @@ JOIN usuarios AS U ON O.iduser = U.iduser;]]>
 				<text><![CDATA[Data:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="107" y="43" width="167" height="20" uuid="e05aea1e-9641-44f3-a01b-cf1532ba8ff5"/>
+				<reportElement x="1" y="0" width="167" height="20" uuid="e05aea1e-9641-44f3-a01b-cf1532ba8ff5"/>
 				<textElement>
 					<font size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
 				</textElement>

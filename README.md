@@ -88,7 +88,7 @@ Para que sua IDE abra execute o modo de Impressão você deve adicionar 2 argume
 5. Adicione os seguintes Argumentos em Default VM arguments:
    
    ```Argumentos
-  --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED
+     --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED
    ```
    
 7. Clique em "Finish"
