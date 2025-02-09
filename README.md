@@ -43,6 +43,8 @@ Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcion
 - **Ireport-5.6.0**: Ferramenta para geração de relatórios.
 
 ## Avisos
+Apague e coloque novamente os drivers da pasta driver para que funcione corretamente!
+
 
 ### JDK 23
 Para executar o projeto na sua IDE, você precisa usar o JDK 23. Caso não tenha, você pode baixá-lo por este link:
@@ -86,8 +88,7 @@ Para que sua IDE abra execute o modo de Impressão você deve adicionar 2 argume
 5. Adicione os seguintes Argumentos em Default VM arguments:
    
    ```Argumentos
-   --add-opens Java.base/Java.lang=ALL-UNNAMED
-   --add-opens Java.base/Java.util=ALL-UNNAMED
+  --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED
    ```
    
 7. Clique em "Finish"
