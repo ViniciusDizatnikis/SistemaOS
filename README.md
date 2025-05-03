@@ -1,57 +1,44 @@
 # Sistema de Ordem de Serviço
 
-Este projeto tem como objetivo aprender e praticar os conceitos básicos de **JFrame** e **SQL**. Foi desenvolvido com ferramentas básicas, sem o uso de frameworks avançados, para proporcionar uma experiência prática de como funciona o desenvolvimento de aplicações com interface gráfica e banco de dados.
-
-## Objetivo
-
-O projeto visa aprender e praticar conceitos básicos de JFrame para criação de interfaces gráficas e SQL para interação com banco de dados, através da implementação de um Sistema de Ordem de Serviço. A ideia é explorar como essas tecnologias podem ser combinadas para desenvolver uma aplicação prática que facilite a gestão de ordens de serviço, clientes e usuários.
-
-- **JFrame** para criar interfaces gráficas simples.
-- **SQL** para interação com banco de dados, realizando operações como inserção, atualização, consulta e exclusão de dados.
+Este projeto foi criado para praticar conceitos básicos de Java com JFrame e SQL, sem o uso de frameworks avançados. Ele tem como foco o desenvolvimento de um sistema de gestão de ordens de serviço, usuários e clientes, com interface gráfica simples e banco de dados MySQL.
 
 ## Funcionalidades
 
-Atualmente, o sistema oferece as seguintes funcionalidades:
+### CRUD de Usuários e Clientes
 
-### CRUD Usuários
-Permite ao Administrador e aos usuários com a permissão "Admin" criar, editar, deletar e visualizar usuários cadastrados no sistema.
+### Validações para segurança e consistência
 
-### CRUD Clientes
-Funcionalidade semelhante à de usuários, permitindo a gestão completa dos clientes.
+### Geração de Relatórios com Ireport
 
-### Validações
-O sistema possui validações robustas para evitar erros e garantir uma experiência segura e eficiente.
+### Formatação de números e preços
 
-### Geração de Relatórios
-Agora é possível gerar relatórios detalhados de clientes, serviços e usuários, facilitando o controle e a gestão.
-
-### Formatação de Números e Preços
-Os valores financeiros e numéricos são formatados corretamente para melhor visualização.
-
-### Tela Principal Ajustada
-A interface da tela principal foi melhorada para proporcionar uma navegação mais intuitiva e eficiente.
-
-## Status do Projeto
-
-Atualmente, o sistema está em fase de desenvolvimento. Estou criando as funcionalidades de **Clientes** e pretendo gerar um **arquivo executável** para facilitar os testes e a execução do sistema sem a necessidade de IDE.
+### Interface ajustada para melhor usabilidade
 
 ## Tecnologias Utilizadas
 
-- **Java** (JDK 23): Linguagem de programação principal.
-- **JFrame**: Biblioteca para criação de interfaces gráficas em Java.
-- **MySQL**: Sistema de gerenciamento de banco de dados relacional.
-- **Ireport-5.6.0**: Ferramenta para geração de relatórios.
+- **Java** (JDK 23)
+- **JFrame** (GUI)
+- **MySQL**(banco de dados)
+- **Ireport-5.6.0** (relátorios)
 
 ## Avisos
 Apague e coloque novamente os drivers da pasta driver para que funcione corretamente!
 
+## Requisitos e Configuração:
+- Java JDK 23 e java 8 ou inferior (caso queira exportar o projeto)
+- WindowBuilder no Eclipse
+- Ireport (com Java 7 configurado caso queira editar)
+- My SQL
 
-### JDK 23
+# Instruções:
+
+## JDK 23
+
 Para executar o projeto na sua IDE, você precisa usar o JDK 23. Caso não tenha, você pode baixá-lo por este link:
 
 [JDK23](https://www.oracle.com/java/technologies/downloads/#jdk23-windows)
 
-### Windowbuilder
+## Windowbuilder
 
 Verifique se você possui o WindowBuilder. Caso não tenha, siga estes passos:
 
@@ -64,7 +51,7 @@ Verifique se você possui o WindowBuilder. Caso não tenha, siga estes passos:
     
 4. Selecione o WindowBuilder e clique em "Finish".
 
-### Ireport
+## Ireport
    
 Caso precise do Ireport, você pode baixá-lo por aqui: [Ireport](https://sourceforge.net/projects/erpbarcode/files/JasperSoft/iReport-5.6.0-windows-installer.exe/download)
 
@@ -78,6 +65,8 @@ Para executar o Ireport, você precisa do Java 7, que pode ser baixado aqui: [Ja
   Logo abaixo, adicione a linha:
   
   jdkhome="C:\Program Files\Java\jdk1.7.0_80"
+
+# Importante!
 
 Para que sua IDE abra execute o modo de Impressão você deve adicionar 2 argumentos na hora de executar:
 
@@ -161,16 +150,6 @@ use essas credenciais para logar:
 - **Login**: "admin"
 - **Senha**: "admin"
 
-6. Ele abrirá a tela principal do sitema. 
+6. Ele abrirá a tela principal do sitema.
+7. 
 ![Tela Principal](Imagens/telaPrincipal.png)  
-
-## Javadoc
-
-O projeto conta com documentação Javadoc detalhada, disponível em Info/javadoc, que descreve todas as classes e métodos implementados, facilitando a compreensão e manutenção do código.
-
-Este projeto ainda está em desenvolvimento. Se encontrar algum problema, sinta-se à vontade para abrir uma issue no repositório do GitHub.
-
-## Conclusão
-
-Este projeto é uma excelente oportunidade para aprender e praticar conceitos básicos de desenvolvimento de software com Java, JFrame e SQL. Sinta-se à vontade para contribuir, 
-testar e reportar quaisquer problemas encontrados. Sua contribuição é muito bem-vinda!
