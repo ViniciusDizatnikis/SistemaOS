@@ -22,7 +22,8 @@ Este projeto foi criado para praticar conceitos básicos de Java com JFrame e SQ
 - **Ireport-5.6.0** (relátorios)
 
 ## Avisos
-Apague e coloque novamente os drivers da pasta driver para que funcione corretamente!
+
+adicione os jars que estão inclusos no projeto no build path.
 
 ## Requisitos e Configuração:
 - Java JDK 23 e java 8 ou inferior (caso queira exportar o projeto)
